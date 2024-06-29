@@ -144,12 +144,9 @@ https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository
 
 > If you have a project directory that is currently not under version control and you want to start controlling it with Git, you first need to go to that project’s directory. [...] and type:
 
-```
+```shell
 git init
 ```
-
-> [!TIP]  
-> Add a `.gitignore` file. Templates can be found at https://github.com/github/gitignore
 
 > This creates a new subdirectory named `.git` that contains all of your necessary repository files — a Git repository skeleton. At this point, nothing in your project is tracked yet.
 >
@@ -268,5 +265,86 @@ Changes to be committed:
 
 #### Staging Modified Files
 
+> If you change a previously tracked file called `CONTRIBUTING.md` and then run your `git status` command again, you get something that looks like this:
+
+![modify-contributing](./README.assets/modify-contributing.jpg) 
+
+> The `CONTRIBUTING.md` file appears under a section named “Changes not staged for commit” — which means that a file that is tracked has been modified in the working directory but not yet staged. To stage it, you run the `git add` command. `git add` is a **multipurpose** command — you use it to begin tracking new files, to stage files, and to do other things like marking merge-conflicted files as resolved. It may be helpful to think of it more as “add precisely this content to the next commit” rather than “add this file to the project”. Let’s run `git add` now to stage the `CONTRIBUTING.md` file, and then run `git status` again:
+
+```
+$ git add CONTRIBUTING.md
+$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   CONTRIBUTING.md
+        new file:   MY-NOTES.md
+```
+
+> Both files are staged and will go into your next commit. At this point, suppose you remember one little change that you want to make in `CONTRIBUTING.md` before you commit it. You open it again and make that change, and you’re ready to commit. However, let’s run `git status` one more time:
+
+![modify-contributing-after-add](./README.assets/modify-contributing-after-add.jpg) 
+
+> Now `CONTRIBUTING.md` is listed as both staged *and* unstaged. How is that possible? It turns out that Git stages a file exactly as it is when you run the `git add` command. If you commit now, the version of `CONTRIBUTING.md` as it was when you last ran the `git add` command is how it will go into the commit, not the version of the file as it looks in your working directory when you run `git commit`. If you modify a file after you run `git add`, you have to run `git add` again to stage the latest version of the file:
+
+```
+$ git add CONTRIBUTING.md
+$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   CONTRIBUTING.md
+        new file:   MY-NOTES.md
+```
+
+#### Short Status
+
+If you run `git status -s` or `git status --short` you get a far more simplified output from the command:
+
+```
+$ git status -s
+M  CONTRIBUTING.md
+A  MY-NOTES.md
+```
+
+#### Ignoring Files
+
+>Often, you’ll have a class of files that you don’t want Git to automatically add or even show you as being untracked. These are generally automatically generated files such as log files or files produced by your build system. In such cases, you can create a file listing patterns to match them named `.gitignore`.
 
 
+> [!TIP]  
+>
+> GitHub maintains a fairly comprehensive list of good `.gitignore` file examples for dozens of projects and languages at https://github.com/github/gitignore if you want a starting point for your project.
+
+>The rules for the patterns you can put in the `.gitignore` file are as follows:
+>- Blank lines or lines starting with `#` are ignored.
+>- Standard glob patterns work, and will be applied recursively throughout the entire working tree.
+>- You can start patterns with a forward slash (`/`) to avoid recursivity.
+>- You can end patterns with a forward slash (`/`) to specify a directory.
+>- You can negate a pattern by starting it with an exclamation point (`!`).
+
+Here is an example `.gitignore` file:
+
+```
+# ignore all .a files
+*.a
+
+# but do track lib.a, even though you're ignoring .a files above
+!lib.a
+
+# only ignore the TODO file in the current directory, not subdir/TODO
+/TODO
+
+# ignore all files in any directory named build
+build/
+
+# ignore doc/notes.txt, but not doc/server/arch.txt
+doc/*.txt
+
+# ignore all .pdf files in the doc/ directory and any of its subdirectories
+doc/**/*.pdf
+```
