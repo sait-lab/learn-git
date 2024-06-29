@@ -158,9 +158,10 @@ git init
 ```shell
 git add FILE1
 git add FILE2
-...
+......
 # Or
 git add .
+
 git commit -m 'Initial project version'
 ```
 
@@ -189,5 +190,51 @@ That command does the same thing as the previous one, but the target directory i
 Git has a number of different transfer protocols you can use. The previous example uses the `https://` protocol, but you may also see `git://` or `user@server:path/to/repo.git`, which uses the SSH transfer protocol.
 
 > [!TIP]  
-> [GitHub Key-Based SSH Authentication](https://github.com/sait-lab/devops/blob/main/GitHub Key-Based SSH Authentication.md)
+> [GitHub Key-Based SSH Authentication](https://github.com/sait-lab/devops/blob/main/GitHub%20Key-Based%20SSH%20Authentication.md)
+
+### Recording Changes to the Repository
+
+https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+
+#### States of files in your working directory
+
+>each file in your working directory can be in one of two states: *tracked* or *untracked*. Tracked files are files that were in the last snapshot, as well as any newly staged files; they can be unmodified, modified, or staged. In short, tracked files are files that Git knows about.
+
+> Untracked files are everything else — any files in your working directory that were not in your last snapshot and are not in your staging area. When you first clone a repository, all of your files will be tracked and unmodified because Git just checked them out and you haven’t edited anything.
+
+> As you edit files, Git sees them as modified, because you’ve changed them since your last commit. As you work, you selectively stage these modified files and then commit all those staged changes, and the cycle repeats.
+
+![lifecycle](./README.assets/lifecycle.png) 
+
+#### Checking the Status of Your Files
+
+The main tool you use to determine which files are in which state is the `git status` command. If you run this command directly after a clone, you should see something like this:
+
+```
+$ git status                                                               ubuntu@kind
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+```
+
+Add a new file to this project, a simple `MY-NOTES.md` file. If the file didn’t exist before, and you run `git status`, you see your untracked file like so:
+
+```
+$ echo 'This file contains my notes' > MY-NOTES.md
+$ git status
+
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        MY-NOTES.md
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+> Untracked basically means that Git sees a file you didn’t have in the previous snapshot (commit), and which hasn’t yet been staged; Git won’t start including it in your commit snapshots until you explicitly tell it to do so. It does this so you don’t accidentally begin including generated binary files or other files that you did not mean to include.
+
+
 
