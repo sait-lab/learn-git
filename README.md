@@ -348,3 +348,120 @@ doc/*.txt
 # ignore all .pdf files in the doc/ directory and any of its subdirectories
 doc/**/*.pdf
 ```
+
+#### Viewing Your Staged and Unstaged Changes
+
+> If the `git status` command is too vague for you — you want to know exactly what you changed, not just which files were changed — you can use the `git diff` command. We’ll cover `git diff` in more detail later, but you’ll probably use it most often to answer these two questions: What have you changed but not yet staged? And what have you staged that you are about to commit? Although `git status` answers those questions very generally by listing the file names, `git diff` shows you the exact lines added and removed — the patch, as it were.
+
+Let’s say you edit and stage the `MY-NOTES.md` file again and then edit the `CONTRIBUTING.md` file without staging it. If you run your `git status` command, you once again see something like this:
+
+```
+$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   MY-NOTES.md
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   CONTRIBUTING.md
+```
+
+> To see what you’ve changed but not yet staged, type `git diff` with no other arguments:
+
+![git-diff](./README.assets/git-diff.jpg) 
+
+> That command compares what is in your working directory with what is in your staging area. The result tells you the changes you’ve made that you haven’t yet staged.
+
+![git-diff--staged](./README.assets/git-diff--staged.png) 
+
+> It’s important to note that `git diff` by itself doesn’t show all changes made since your last commit — only changes that are still unstaged. If you’ve staged all of your changes, `git diff` will give you no output.
+>
+> For another example, if you stage the `CONTRIBUTING.md` file and then edit it, you can use `git diff` to see the changes in the file that are staged and the changes that are unstaged. If our environment looks like this:
+
+```
+$ git add CONTRIBUTING.md
+$ echo '# test line' >> CONTRIBUTING.md
+$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   CONTRIBUTING.md
+        modified:   MY-NOTES.md
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   CONTRIBUTING.md
+```
+
+> Now you can use `git diff` to see what is still unstaged:
+
+```
+$ git diff
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index 112d9d7..a64cb95 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -3,3 +3,4 @@
+ Feel free to fork this repository and submit pull requests with improvements to the documents or suggestions for additional guides. Your contributions are highly appreciated!
+
+ Thanks.
++# test line
+```
+
+> and `git diff --cached` to see what you’ve staged so far (`--staged` and `--cached` are synonyms):
+
+```
+$ git diff --cached
+diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
+index 0c90661..112d9d7 100644
+--- a/CONTRIBUTING.md
++++ b/CONTRIBUTING.md
+@@ -1,3 +1,5 @@
+ ## Contributing
+
+-Feel free to fork this repository and submit pull requests with improvements to the documents or suggestions for additional guides. Your contributions are highly appreciated!Thanks
++Feel free to fork this repository and submit pull requests with improvements to the documents or suggestions for additional guides. Your contributions are highly appreciated!
++
++Thanks.
+diff --git a/MY-NOTES.md b/MY-NOTES.md
+index fa002f7..dfa8c4b 100644
+--- a/MY-NOTES.md
++++ b/MY-NOTES.md
+@@ -1 +1 @@
+-This file contains my notes.
++This file contains my notes
+```
+
+> [!NOTE]  
+>
+> **Git Diff in an External Tool**
+>
+> We will continue to use the git diff command in various ways throughout the rest of the book. There is another way to look at these diffs if you prefer a graphical or external diff viewing program instead. If you run git difftool instead of git diff, you can view any of these diffs in software like emerge, vimdiff and many more (including commercial products). Run `git difftool --tool-help` to see what is available on your system.
+>
+> ![git-diff-ext-macos](./README.assets/git-diff-ext-macos.png) 
+>
+> ![git-diff-ext-nvimdiff](./README.assets/git-diff-ext-nvimdiff.png) 
+
+#### Committing Your Changes
+
+>Now that your staging area is set up the way you want it, you can commit your changes. Remember that anything that is still unstaged — any files you have created or modified that you haven’t run `git add` on since you edited them — won’t go into this commit. They will stay as modified files on your disk. In this case, let’s say that the last time you ran `git status`, you saw that everything was staged, so you’re ready to commit your changes. The simplest way to commit is to type `git commit`:
+
+```console
+$ git commit
+```
+
+
+
+
+
+
+
