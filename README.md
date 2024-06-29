@@ -447,9 +447,9 @@ index fa002f7..dfa8c4b 100644
 >
 > We will continue to use the git diff command in various ways throughout the rest of the book. There is another way to look at these diffs if you prefer a graphical or external diff viewing program instead. If you run git difftool instead of git diff, you can view any of these diffs in software like emerge, vimdiff and many more (including commercial products). Run `git difftool --tool-help` to see what is available on your system.
 >
-> ![git-diff-ext-macos](./README.assets/git-diff-ext-macos.png) 
+> The screenshot below shows an example of using [Kaleidoscope](https://kaleidoscope.app/) as `git difftool` on macOS.![git-diff-ext-macos](./README.assets/git-diff-ext-macos.png) 
 >
-> ![git-diff-ext-nvimdiff](./README.assets/git-diff-ext-nvimdiff.png) 
+> The screenshot below shows an example of using nvimdiff as `git difftool` on Linux terminal.![git-diff-ext-nvimdiff](./README.assets/git-diff-ext-nvimdiff.png) 
 
 #### Committing Your Changes
 
@@ -459,7 +459,66 @@ index fa002f7..dfa8c4b 100644
 $ git commit
 ```
 
+> Doing so launches your editor of choice.
 
+> [!NOTE]  
+>
+> This is set by your shell’s `EDITOR` environment variable — usually vim or emacs, although you can configure it with whatever you want using the `git config --global core.editor` command as you saw in [Getting Started](https://git-scm.com/book/en/v2/ch00/ch01-getting-started).
+
+The editor displays the following text (this example is a Neovim screen):
+
+![git-commit-nvim](./README.assets/git-commit-nvim.jpg) 
+
+> You can see that the default commit message contains the latest output of the `git status` command commented out and one empty line on top. You can remove these comments and type your commit message, or you can leave them there to help you remember what you’re committing.
+>
+> When you exit the editor, Git creates your commit with that commit message (with the comments and diff stripped out).
+>
+> ![git-commit-msg](./README.assets/git-commit-msg.jpg) 
+>
+> ![after-git-commit-output](./README.assets/after-git-commit-output.jpeg) 
+
+> Alternatively, you can type your commit message inline with the `commit` command by specifying it after a `-m` flag, like this:
+
+```
+$ echo 'Keep adding notes.' >> MY-NOTES.md
+$ git add MY-NOTES.md
+$ git commit -m 'style: add note description'
+[main 88c83f4] style: add note description
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
+
+>The commit has given you some output about itself: which branch you committed to (`master`), what SHA-1 checksum the commit has (`463dc4f`), how many files were changed, and statistics about lines added and removed in the commit.
+>
+>Remember that the commit records the snapshot you set up in your staging area. Anything you didn’t stage is still sitting there modified; you can do another commit to add it to your history. Every time you perform a commit, you’re recording a snapshot of your project that you can revert to or compare to later.
+
+#### Skipping the Staging Area
+
+> Although it can be amazingly useful for crafting commits exactly how you want them, the staging area is sometimes a bit more complex than you need in your workflow. If you want to skip the staging area, Git provides a simple shortcut. Adding the `-a` option to the `git commit` command makes Git automatically stage every file that is already tracked before doing the commit, letting you skip the `git add` part:
+
+```
+$ echo '# test line 2' >> CONTRIBUTING.md
+$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 3 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   CONTRIBUTING.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+```
+$ git commit -a -m 'docs: add another line'
+[main fea69b8] docs: add another line
+ 1 file changed, 1 insertion(+)
+```
+
+> Notice how you don’t have to run `git add` on the `CONTRIBUTING.md` file in this case before you commit. That’s because the `-a` flag includes all changed files. This is convenient, but be careful; sometimes this flag will cause you to include unwanted changes.
+
+#### Removing Files
 
 
 
