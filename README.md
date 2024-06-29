@@ -148,6 +148,9 @@ https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository
 git init
 ```
 
+> [!TIP]  
+> Add a .gitignore file. Templates can be found at https://github.com/github/gitignore
+
 > This creates a new subdirectory named `.git` that contains all of your necessary repository files — a Git repository skeleton. At this point, nothing in your project is tracked yet.
 >
 > If you want to start version-controlling existing files (as opposed to an empty directory), you should probably begin tracking those files and do an initial commit. You can accomplish that with a few `git add` commands that specify the files you want to track, followed by a `git commit`:
@@ -163,5 +166,28 @@ git commit -m 'Initial project version'
 
 #### Cloning an Existing Repository
 
+> If you want to get a copy of an existing Git repository — for example, a project you’d like to contribute to — the command you need is `git clone`. 
+>
+> You clone a repository with `git clone <url>`. 
 
+For example, if you want to clone this repository, you can do so like this:
+
+```shell
+git clone https://github.com/sait-lab/git-basics
+```
+
+That creates a directory named `git-basics`, initializes a `.git` directory inside it, pulls down all the data for that repository, and checks out a working copy of the latest version. If you go into the new `git-basics` directory that was just created, you’ll see the project files in there, ready to be worked on or used.
+
+If you want to clone the repository into a directory named something other than `git-basics`, you can specify the new directory name as an additional argument:
+
+```
+git clone https://github.com/sait-lab/git-basics ~/my-git-notes
+```
+
+That command does the same thing as the previous one, but the target directory is called `my-git-notes`.
+
+Git has a number of different transfer protocols you can use. The previous example uses the `https://` protocol, but you may also see `git://` or `user@server:path/to/repo.git`, which uses the SSH transfer protocol.
+
+> [!TIP]  
+> [GitHub Key-Based SSH Authentication](https://github.com/sait-lab/devops/blob/main/GitHub Key-Based SSH Authentication.md)
 
