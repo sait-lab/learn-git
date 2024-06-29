@@ -149,7 +149,7 @@ git init
 ```
 
 > [!TIP]  
-> Add a .gitignore file. Templates can be found at https://github.com/github/gitignore
+> Add a `.gitignore` file. Templates can be found at https://github.com/github/gitignore
 
 > This creates a new subdirectory named `.git` that contains all of your necessary repository files — a Git repository skeleton. At this point, nothing in your project is tracked yet.
 >
@@ -265,6 +265,8 @@ Changes to be committed:
 > ![zsh-theme-git-prompt](./README.assets/zsh-theme-git-prompt.jpg) 
 
 > You can tell that it’s staged because it’s under the “Changes to be committed” heading. If you commit at this point, the version of the file at the time you ran `git add` is what will be in the subsequent historical snapshot. You may recall that when you ran `git init` earlier, you then ran `git add <files>` — that was to begin tracking files in your directory. The `git add` command takes a path name for either a file or a directory; if it’s a directory, the command adds all the files in that directory recursively.
+
+#### Staging Modified Files
 
 
 
