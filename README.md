@@ -236,5 +236,35 @@ nothing added to commit but untracked files present (use "git add" to track)
 
 > Untracked basically means that Git sees a file you didn’t have in the previous snapshot (commit), and which hasn’t yet been staged; Git won’t start including it in your commit snapshots until you explicitly tell it to do so. It does this so you don’t accidentally begin including generated binary files or other files that you did not mean to include.
 
+![git_commands](./README.assets/git_commands.png) 
+Credit: [Chapter 15 Git Command Line Interface (CLI) | The Shiny AWS Book (business-science.github.io)](https://business-science.github.io/shiny-production-with-aws-book/git-command-line-interface-cli.html)
+
+#### Tracking New Files
+
+Use the command `git add` to track a new file.
+
+```
+$ git add MY-NOTES.md
+```
+
+If you run your status command again, you can see that your `MY-NOTES` file is now tracked and staged to be committed:
+
+```
+git status                                                            ubuntu@kind
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   MY-NOTES.md
+```
+
+> [!TIP]  
+> You can enhance the shell with `git` integration. The screenshot below shows [romkatv/powerlevel10k: A Zsh theme (github.com)](https://github.com/romkatv/powerlevel10k) adds git status to the `zsh` command line prompt.
+>
+> ![zsh-theme-git-prompt](./README.assets/zsh-theme-git-prompt.jpg) 
+
+> You can tell that it’s staged because it’s under the “Changes to be committed” heading. If you commit at this point, the version of the file at the time you ran `git add` is what will be in the subsequent historical snapshot. You may recall that when you ran `git init` earlier, you then ran `git add <files>` — that was to begin tracking files in your directory. The `git add` command takes a path name for either a file or a directory; if it’s a directory, the command adds all the files in that directory recursively.
+
 
 
