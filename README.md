@@ -449,6 +449,9 @@ index fa002f7..dfa8c4b 100644
 >
 > The screenshot below shows an example of using [Kaleidoscope](https://kaleidoscope.app/) as `git difftool` on macOS.![git-diff-ext-macos](./README.assets/git-diff-ext-macos.png) 
 >
+> The screenshot below shows an example of using [Fork](https://git-fork.com/) as `git difftool` on macOS.
+> ![git-difftool-fork](./README.assets/git-difftool-fork.jpg) 
+>
 > The screenshot below shows an example of using nvimdiff as `git difftool` on Linux terminal.![git-diff-ext-nvimdiff](./README.assets/git-diff-ext-nvimdiff.png) 
 
 #### Committing Your Changes
