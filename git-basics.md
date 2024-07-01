@@ -181,18 +181,18 @@ git commit -m 'Initial project version'
 For example, if you want to clone this repository, you can do so like this:
 
 ```shell
-git clone https://github.com/sait-lab/git-basics
+git clone https://github.com/sait-lab/git-demo-repo.git
 ```
 
 That creates a directory named `git-basics`, initializes a `.git` directory inside it, pulls down all the data for that repository, and checks out a working copy of the latest version. If you go into the new `git-basics` directory that was just created, you’ll see the project files in there, ready to be worked on or used.
 
-If you want to clone the repository into a directory named something other than `git-basics`, you can specify the new directory name as an additional argument:
+If you want to clone the repository into a directory named something other than `git-demo-repo`, you can specify the new directory name as an additional argument:
 
 ```
-git clone https://github.com/sait-lab/git-basics ~/my-git-notes
+git clone https://github.com/sait-lab/git-demo-repo.git ~/my-git-demo-repo
 ```
 
-That command does the same thing as the previous one, but the target directory is called `my-git-notes`.
+That command does the same thing as the previous one, but the target directory is called `my-git-demo-repo`.
 
 Git has a number of different transfer protocols you can use. The previous example uses the `https://` protocol, but you may also see `git://` or `user@server:path/to/repo.git`, which uses the SSH transfer protocol.
 
@@ -224,7 +224,7 @@ https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
 The main tool you use to determine which files are in which state is the `git status` command. If you run this command directly after a clone, you should see something like this:
 
 ```
-$ git status                                                               ubuntu@kind
+$ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -234,6 +234,7 @@ nothing to commit, working tree clean
 Add a new file to this project, a simple `MY-NOTES.md` file. If the file didn’t exist before, and you run `git status`, you see your untracked file like so:
 
 ```
+$ # Create a MY-NOTES.md file
 $ echo 'This file contains my notes' > MY-NOTES.md
 $ git status
 
@@ -263,7 +264,7 @@ $ git add MY-NOTES.md
 If you run your status command again, you can see that your `MY-NOTES` file is now tracked and staged to be committed:
 
 ```
-git status                                                            ubuntu@kind
+git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -281,40 +282,40 @@ Changes to be committed:
 
 #### Staging Modified Files
 
-> If you change a previously tracked file called `CONTRIBUTING.md` and then run your `git status` command again, you get something that looks like this:
+> If you change a previously tracked file called `README` and then run your `git status` command again, you get something that looks like this:
 
-![modify-contributing](./git-basics.assets/modify-contributing.jpg) 
+![modify-readme](./git-basics.assets/modify-readme.jpg) 
 
-> The `CONTRIBUTING.md` file appears under a section named “Changes not staged for commit” — which means that a file that is tracked has been modified in the working directory but not yet staged. To stage it, you run the `git add` command. `git add` is a **multipurpose** command — you use it to begin tracking new files, to stage files, and to do other things like marking merge-conflicted files as resolved. It may be helpful to think of it more as “add precisely this content to the next commit” rather than “add this file to the project”. Let’s run `git add` now to stage the `CONTRIBUTING.md` file, and then run `git status` again:
+> The `README` file appears under a section named “Changes not staged for commit” — which means that a file that is tracked has been modified in the working directory but not yet staged. To stage it, you run the `git add` command. `git add` is a **multipurpose** command — you use it to begin tracking new files, to stage files, and to do other things like marking merge-conflicted files as resolved. It may be helpful to think of it more as “add precisely this content to the next commit” rather than “add this file to the project”. Let’s run `git add` now to stage the `README` file, and then run `git status` again:
 
 ```
-$ git add CONTRIBUTING.md
+$ git add README
 $ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        modified:   CONTRIBUTING.md
         new file:   MY-NOTES.md
+        modified:   README
 ```
 
-> Both files are staged and will go into your next commit. At this point, suppose you remember one little change that you want to make in `CONTRIBUTING.md` before you commit it. You open it again and make that change, and you’re ready to commit. However, let’s run `git status` one more time:
+> Both files are staged and will go into your next commit. At this point, suppose you remember one little change (`echo 'git is a powerful tool' >> README`) that you want to make in `README` before you commit it. You open it again and make that change, and you’re ready to commit. However, let’s run `git status` one more time:
 
-![modify-contributing-after-add](./git-basics.assets/modify-contributing-after-add.jpg) 
+![modify-readme-after-add](./git-basics.assets/modify-readme-after-add.jpg) 
 
-> Now `CONTRIBUTING.md` is listed as both staged *and* unstaged. How is that possible? It turns out that Git stages a file exactly as it is when you run the `git add` command. If you commit now, the version of `CONTRIBUTING.md` as it was when you last ran the `git add` command is how it will go into the commit, not the version of the file as it looks in your working directory when you run `git commit`. If you modify a file after you run `git add`, you have to run `git add` again to stage the latest version of the file:
+> Now `README` is listed as both staged *and* unstaged. How is that possible? It turns out that Git stages a file exactly as it is when you run the `git add` command. If you commit now, the version of `README` as it was when you last ran the `git add` command is how it will go into the commit, not the version of the file as it looks in your working directory when you run `git commit`. If you modify a file after you run `git add`, you have to run `git add` again to stage the latest version of the file:
 
 ```
-$ git add CONTRIBUTING.md
+$ git add README
 $ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        modified:   CONTRIBUTING.md
         new file:   MY-NOTES.md
+        modified:   README
 ```
 
 #### Short Status
@@ -323,8 +324,8 @@ If you run `git status -s` or `git status --short` you get a far more simplified
 
 ```
 $ git status -s
-M  CONTRIBUTING.md
 A  MY-NOTES.md
+M  README
 ```
 
 #### Ignoring Files
@@ -369,92 +370,68 @@ doc/**/*.pdf
 
 > If the `git status` command is too vague for you — you want to know exactly what you changed, not just which files were changed — you can use the `git diff` command. We’ll cover `git diff` in more detail later, but you’ll probably use it most often to answer these two questions: What have you changed but not yet staged? And what have you staged that you are about to commit? Although `git status` answers those questions very generally by listing the file names, `git diff` shows you the exact lines added and removed — the patch, as it were.
 
-Let’s say you edit and stage the `MY-NOTES.md` file again and then edit the `CONTRIBUTING.md` file without staging it. If you run your `git status` command, you once again see something like this:
+Let’s say you edit and stage the `MY-NOTES.md` file again and then edit the `README` file without staging it. If you run your `git status` command, you once again see something like this:
 
 ```
+$ echo 'these notes are helpful' >> MY-NOTES.md
+$ git add MY-NOTES.md
+$ git add README
+$ echo 'keep working on labs' >> README
 $ git status
 On branch main
-Your branch is ahead of 'origin/main' by 1 commit.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/main'.
 
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        modified:   MY-NOTES.md
+        new file:   MY-NOTES.md
+        modified:   README
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-        modified:   CONTRIBUTING.md
+        modified:   README
 ```
 
-> To see what you’ve changed but not yet staged, type `git diff` with no other arguments:
+> To see what you’ve changed but not yet staged, type `git diff` with no other arguments. That command compares what is in your working directory with what is in your staging area. The result tells you the changes you’ve made that you haven’t yet staged.
 
 ![git-diff](./git-basics.assets/git-diff.jpg) 
 
-> That command compares what is in your working directory with what is in your staging area. The result tells you the changes you’ve made that you haven’t yet staged.
+`git diff --staged` will compare your staged changes against the previous commit.
 
-![git-diff--staged](./git-basics.assets/git-diff--staged.png) 
+![git-diff-staged](./git-basics.assets/git-diff-staged.jpg) 
+
+> [!NOTE]  
+>
+>  You can also use `git diff --cached` to see what you’ve staged so far (`--staged` and `--cached` are synonyms)
 
 > It’s important to note that `git diff` by itself doesn’t show all changes made since your last commit — only changes that are still unstaged. If you’ve staged all of your changes, `git diff` will give you no output.
->
-> For another example, if you stage the `CONTRIBUTING.md` file and then edit it, you can use `git diff` to see the changes in the file that are staged and the changes that are unstaged. If our environment looks like this:
 
 ```
-$ git add CONTRIBUTING.md
-$ echo '# test line' >> CONTRIBUTING.md
-$ git status
-On branch main
-Your branch is ahead of 'origin/main' by 1 commit.
-  (use "git push" to publish your local commits)
-
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        modified:   CONTRIBUTING.md
-        modified:   MY-NOTES.md
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   CONTRIBUTING.md
-```
-
-> Now you can use `git diff` to see what is still unstaged:
-
-```
+$ git add .
 $ git diff
-diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
-index 112d9d7..a64cb95 100644
---- a/CONTRIBUTING.md
-+++ b/CONTRIBUTING.md
-@@ -3,3 +3,4 @@
- Feel free to fork this repository and submit pull requests with improvements to the documents or suggestions for additional guides. Your contributions are highly appreciated!
-
- Thanks.
-+# test line
 ```
 
 > and `git diff --cached` to see what you’ve staged so far (`--staged` and `--cached` are synonyms):
 
 ```
 $ git diff --cached
-diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
-index 0c90661..112d9d7 100644
---- a/CONTRIBUTING.md
-+++ b/CONTRIBUTING.md
-@@ -1,3 +1,5 @@
- ## Contributing
-
--Feel free to fork this repository and submit pull requests with improvements to the documents or suggestions for additional guides. Your contributions are highly appreciated!Thanks
-+Feel free to fork this repository and submit pull requests with improvements to the documents or suggestions for additional guides. Your contributions are highly appreciated!
-+
-+Thanks.
 diff --git a/MY-NOTES.md b/MY-NOTES.md
-index fa002f7..dfa8c4b 100644
---- a/MY-NOTES.md
+new file mode 100644
+index 0000000..3b51193
+--- /dev/null
 +++ b/MY-NOTES.md
-@@ -1 +1 @@
--This file contains my notes.
+@@ -0,0 +1,2 @@
 +This file contains my notes
++these notes are helpful
+diff --git a/README b/README
+index ecb469a..1bca90c 100644
+--- a/README
++++ b/README
+@@ -1 +1,4 @@
+ welcome to git demo repo
++learn git
++git is a powerful tool
++keep working on labs
 ```
 
 > [!NOTE]  
@@ -468,7 +445,7 @@ index fa002f7..dfa8c4b 100644
 > The screenshot below shows an example of using [Fork](https://git-fork.com/) as `git difftool` on macOS.
 > ![git-difftool-fork](./git-basics.assets/git-difftool-fork.jpg) 
 >
-> The screenshot below shows an example of using nvimdiff as `git difftool` on Linux terminal.![git-diff-ext-nvimdiff](./git-basics.assets/git-diff-ext-nvimdiff.png) 
+> The screenshot below shows an example of using nvimdiff as `git difftool` on Linux terminal. ![git-diff-ext-nvimdiff](./git-basics.assets/git-diff-ext-nvimdiff.png) 
 
 #### Committing Your Changes
 
@@ -494,19 +471,21 @@ The editor displays the following text (this example is a Neovim screen):
 >
 > ![git-commit-msg](./git-basics.assets/git-commit-msg.jpg) 
 >
-> ![after-git-commit-output](./git-basics.assets/after-git-commit-output.jpeg) 
+> Once you save the current COMMIT_EDITMSG file and exit the editor, you will see the commit hash, commit message, how many files were changed, and statistics about lines added and removed in the commit.
+>
+> ![after-git-commit-output](./git-basics.assets/after-git-commit-output.jpg) 
 
 > Alternatively, you can type your commit message inline with the `commit` command by specifying it after a `-m` flag, like this:
 
 ```
-$ echo 'Keep adding notes.' >> MY-NOTES.md
+$ echo 'note 1: get your hands dirty and learn' >> MY-NOTES.md
 $ git add MY-NOTES.md
-$ git commit -m 'style: add note description'
-[main 88c83f4] style: add note description
- 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git commit -m 'docs: add first note'
+[main 112baf8] style: docs: add first note
+ 1 file changed, 1 insertion(+)
 ```
 
->The commit has given you some output about itself: which branch you committed to (`master`), what SHA-1 checksum the commit has (`463dc4f`), how many files were changed, and statistics about lines added and removed in the commit.
+>The commit has given you some output about itself: which branch you committed to (`master`), what SHA-1 checksum the commit has (`112baf8`), how many files were changed, and statistics about lines added and removed in the commit.
 >
 >Remember that the commit records the snapshot you set up in your staging area. Anything you didn’t stage is still sitting there modified; you can do another commit to add it to your history. Every time you perform a commit, you’re recording a snapshot of your project that you can revert to or compare to later.
 
@@ -515,27 +494,29 @@ $ git commit -m 'style: add note description'
 > Although it can be amazingly useful for crafting commits exactly how you want them, the staging area is sometimes a bit more complex than you need in your workflow. If you want to skip the staging area, Git provides a simple shortcut. Adding the `-a` option to the `git commit` command makes Git automatically stage every file that is already tracked before doing the commit, letting you skip the `git add` part:
 
 ```
-$ echo '# test line 2' >> CONTRIBUTING.md
+$ echo 'youtube is a great educational resource' >> README
 $ git status
 On branch main
-Your branch is ahead of 'origin/main' by 3 commits.
+Your branch is ahead of 'origin/main' by 2 commits.
   (use "git push" to publish your local commits)
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-        modified:   CONTRIBUTING.md
+        modified:   README
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
 ```
-$ git commit -a -m 'docs: add another line'
-[main fea69b8] docs: add another line
+$ git commit -a -m 'docs: add youtube line'
+[main cb0c4b9] docs: add youtube line
  1 file changed, 1 insertion(+)
 ```
 
-> Notice how you don’t have to run `git add` on the `CONTRIBUTING.md` file in this case before you commit. That’s because the `-a` flag includes all changed files. This is convenient, but be careful; sometimes this flag will cause you to include unwanted changes.
+> [!NOTE]  
+>
+> Notice how you don’t have to run `git add` on the `README` file in this case before you commit. That’s because the `-a` flag includes all changed files. This is convenient, but **be careful; sometimes this flag will cause you to include unwanted changes**.
 
 #### Removing Files
 
@@ -543,9 +524,7 @@ $ git commit -a -m 'docs: add another line'
 >
 > Another useful thing you may want to do is to keep the file in your working tree but remove it from your staging area. This is particularly useful if you forgot to add something to your `.gitignore` file and accidentally staged it, like a large log file or a bunch of `.a` compiled files. To do this, use the `--cached` option:
 
-```console
-$ git rm --cached README.md
-```
+![git-rm-cached](./git-basics.assets/git-rm-cached.jpg) 
 
 #### Moving Files
 
@@ -557,23 +536,14 @@ $ git mv file_from file_to
 
 > and it works fine. In fact, if you run something like this and look at the status, you’ll see that Git considers it a renamed file:
 
-```console
-$ git mv README.md README
-$ git status
-On branch master
-Your branch is up-to-date with 'origin/master'.
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-    renamed:    README.md -> README
-```
+![git-mv](./git-basics.assets/git-mv.jpg) 
 
 > However, this is equivalent to running something like this:
 
 ```console
-$ mv README.md README
-$ git rm README.md
-$ git add README
+$ mv file-2.txt file2.txt
+$ git rm file-2.txt
+$ git add file2.txt
 ```
 
 
@@ -590,29 +560,30 @@ $ git add README
 
 ```
 $ git log
-commit fea69b8c7b6447af763fdae540f9621b2ec7167b (HEAD -> main)
+commit cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main)
 Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 04:26:43 2024 -0600
+Date:   Mon Jul 1 00:41:33 2024 -0600
 
-    docs: add another line
+    docs: add youtube line
 
-commit 88c83f42cdf406bbb807becc27f28e138654f22b
+commit 112baf88345293f41f8ade0de15ead40ffc68bf6
 Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 04:23:17 2024 -0600
+Date:   Mon Jul 1 00:37:10 2024 -0600
 
-    style: add note description
+    docs: add first note
 
-commit 058597db21584343ccd207ca91d577d36b91823b
+commit 10d0b1e2ecac34e24ca0fb5ab3c40e120c7dc880
 Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 04:13:41 2024 -0600
+Date:   Mon Jul 1 00:28:43 2024 -0600
 
-    docs: add personal notes file MY-NOTES
+    docs: add personal notes and modify README
 
-commit a815322b7f1abb7ac3546f561e47b051ee125171
-Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 03:45:45 2024 -0600
+commit f3a85ef6962e008c20a770785907284ffbd9b43d (origin/main, origin/HEAD)
+Author: Hong Yan <contact@yanhong.ca>
+Date:   Sun Jun 30 23:31:56 2024 -0600
 
-    style: fix MY-NOTES.md
+    docs: add learn-git link
+......
 ```
 
 > By default, with no arguments, `git log` lists the commits made in that repository in reverse chronological order; that is, the most recent commits show up first. As you can see, this command lists each commit with its SHA-1 checksum, the author’s name and email, the date written, and the commit message.
@@ -621,43 +592,34 @@ Date:   Sat Jun 29 03:45:45 2024 -0600
 
 ```
 $ git log --stat
-commit fea69b8c7b6447af763fdae540f9621b2ec7167b (HEAD -> main)
+commit cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main)
 Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 04:26:43 2024 -0600
+Date:   Mon Jul 1 00:41:33 2024 -0600
 
-    docs: add another line
+    docs: add youtube line
 
- CONTRIBUTING.md | 1 +
+ README | 1 +
  1 file changed, 1 insertion(+)
 
-commit 88c83f42cdf406bbb807becc27f28e138654f22b
+commit 112baf88345293f41f8ade0de15ead40ffc68bf6
 Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 04:23:17 2024 -0600
+Date:   Mon Jul 1 00:37:10 2024 -0600
 
-    style: add note description
+    docs: add first note
 
- MY-NOTES.md | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MY-NOTES.md | 1 +
+ 1 file changed, 1 insertion(+)
 
-commit 058597db21584343ccd207ca91d577d36b91823b
+commit 10d0b1e2ecac34e24ca0fb5ab3c40e120c7dc880
 Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 04:13:41 2024 -0600
+Date:   Mon Jul 1 00:28:43 2024 -0600
 
-    docs: add personal notes file MY-NOTES
+    docs: add personal notes and modify README
 
- CONTRIBUTING.md | 5 ++++-
- MY-NOTES.md     | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-commit a815322b7f1abb7ac3546f561e47b051ee125171
-Author: Hong Yan <hong.yan@sait.ca>
-Date:   Sat Jun 29 03:45:45 2024 -0600
-
-    style: fix MY-NOTES.md
-
- CONTRIBUTING.md | 4 +---
- MY-NOTES.md     | 1 +
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ MY-NOTES.md | 2 ++
+ README      | 3 +++
+ 2 files changed, 5 insertions(+)
+ ......
 ```
 
 > Another really useful option is `--pretty`. This option changes the log output to formats other than the default. A few prebuilt option values are available for you to use. The `oneline` value for this option prints each commit on a single line, which is useful if you’re looking at a lot of commits.
@@ -674,11 +636,10 @@ a815322b7f1abb7ac3546f561e47b051ee125171 style: fix MY-NOTES.md
 
 ````
 $ git log --pretty=format:"%h %s" --graph
-* fea69b8 docs: add another line
-* 88c83f4 style: add note description
-* 058597d docs: add personal notes file MY-NOTES
-* a815322 style: fix MY-NOTES.md
-* 831f10b docs: add CONTRIBUTING.md
+cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main) docs: add youtube line
+112baf88345293f41f8ade0de15ead40ffc68bf6 docs: add first note
+10d0b1e2ecac34e24ca0fb5ab3c40e120c7dc880 docs: add personal notes and modify README
+......
 ````
 
 
@@ -689,7 +650,7 @@ $ git log --pretty=format:"%h %s" --graph
 
 ### Undoing Things
 
-
+#### Redo the commit
 
 >When you commit too early and possibly forget to add some files, or you mess up your commit message. If you want to redo that commit, make the additional changes you forgot, stage them, and commit again using the `--amend` option:
 
@@ -701,26 +662,16 @@ $ git commit --amend
 
 ```
 $ git log --pretty=oneline -n 3
-fea69b8c7b6447af763fdae540f9621b2ec7167b (HEAD -> main) docs: add another line
-88c83f42cdf406bbb807becc27f28e138654f22b style: add note description
-058597db21584343ccd207ca91d577d36b91823b docs: add personal notes file MY-NOTES
+cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main) docs: add youtube line
+112baf88345293f41f8ade0de15ead40ffc68bf6 docs: add first note
+10d0b1e2ecac34e24ca0fb5ab3c40e120c7dc880 docs: add personal notes and modify README
 ```
 
 > [!NOTE]  
 >
 > `git log` with ` -n 3` shows 3 latest commits only.
 
-```
-$ git commit --amend -m "add yet another line"
-[main a52712f] add yet another line
- Date: Sat Jun 29 04:26:43 2024 -0600
- 1 file changed, 1 insertion(+)
-
-$ git log --pretty=oneline -n 3
-a52712f750669d60270fd1dbf8f1c5d080fb0ba5 (HEAD -> main) add yet another line
-88c83f42cdf406bbb807becc27f28e138654f22b style: add note description
-058597db21584343ccd207ca91d577d36b91823b docs: add personal notes file MY-NOTES
-```
+![git-commit-amend](./git-basics.assets/git-commit-amend.jpg) 
 
 > [!IMPORTANT]  
 > `git commit --amend` changes the commit history. The last commit's hash has been changed.
@@ -731,3 +682,36 @@ a52712f750669d60270fd1dbf8f1c5d080fb0ba5 (HEAD -> main) add yet another line
 >
 > Only amend commits that are still local and have not been pushed somewhere. Amending previously pushed commits and force pushing the branch will cause problems for your collaborators.
 
+#### Unstaging a Staged File
+
+You have added and committed a new file `file2.txt`. Then you made changes to the file.
+
+![before-reset](./git-basics.assets/before-reset.jpg) 
+
+You stage the file. But you change your mind and want to unstage it (not include it in the next commit). You can use `git restore --staged` command.
+
+![git-restore-staged](./git-basics.assets/git-restore-staged.png) 
+
+#### Unmodifying a Modified File
+
+> What if you realize that you don’t want to keep your changes to the `CONTRIBUTING.md` file? How can you easily unmodify it — revert it back to what it looked like when you last committed?
+>
+> Use `git checkout -- <file>` to discard changes in working directory.
+
+![unmodify-file](./git-basics.assets/unmodify-file.jpg) 
+
+> [!IMPORTANT]
+>
+> It’s important to understand that `git restore <file>` is a dangerous command. Any local changes you made to that file are gone — Git just replaced that file with the last staged or committed version. Don’t ever use this command unless you absolutely know that you don’t want those unsaved local changes.
+
+
+
+---
+
+
+
+### Working with Remotes
+
+> To be able to collaborate on any Git project, you need to know how to manage your remote repositories. Remote repositories are versions of your project that are hosted on the Internet or network somewhere. You can have several of them, each of which generally is either read-only or read/write for you. Collaborating with others involves managing these remote repositories and pushing and pulling data to and from them when you need to share work. Managing remote repositories includes knowing how to add remote repositories, remove remotes that are no longer valid, manage various remote branches and define them as being tracked or not, and more. In this section, we’ll cover some of these remote-management skills.
+
+#### Showing Your Remotes
