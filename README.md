@@ -1,4 +1,4 @@
-## Git Basics
+## Learn Git
 
 ![git-logo](./git-basics.assets/git-logo.png) 
 

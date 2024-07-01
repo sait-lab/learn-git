@@ -534,8 +534,6 @@ $ git commit -a -m 'docs: add youtube line'
 $ git mv file_from file_to
 ```
 
-> and it works fine. In fact, if you run something like this and look at the status, you’ll see that Git considers it a renamed file:
-
 ![git-mv](./git-basics.assets/git-mv.jpg) 
 
 > However, this is equivalent to running something like this:
@@ -674,7 +672,7 @@ cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main) docs: add youtube line
 ![git-commit-amend](./git-basics.assets/git-commit-amend.jpg) 
 
 > [!IMPORTANT]  
-> `git commit --amend` changes the commit history. The last commit's hash has been changed.
+> `git commit --amend` changes the commit history. Note that the hash of last commit has been changed.
 
 > [!NOTE]  
 >
@@ -715,3 +713,141 @@ You stage the file. But you change your mind and want to unstage it (not include
 > To be able to collaborate on any Git project, you need to know how to manage your remote repositories. Remote repositories are versions of your project that are hosted on the Internet or network somewhere. You can have several of them, each of which generally is either read-only or read/write for you. Collaborating with others involves managing these remote repositories and pushing and pulling data to and from them when you need to share work. Managing remote repositories includes knowing how to add remote repositories, remove remotes that are no longer valid, manage various remote branches and define them as being tracked or not, and more. In this section, we’ll cover some of these remote-management skills.
 
 #### Showing Your Remotes
+
+`git remote -v` shows you the URLs that Git has stored for the shortname to be used when reading and writing to that remote:
+
+```
+$ git remote -v
+origin  https://github.com/sait-lab/git-demo-repo.git (fetch)
+origin  https://github.com/sait-lab/git-demo-repo.git (push)
+```
+
+> If you have more than one remote, the command lists them all. For example, a repository with multiple remotes for working with several collaborators might look something like this.
+
+```console
+$ cd grit
+$ git remote -v
+bakkdoor  https://github.com/bakkdoor/grit (fetch)
+bakkdoor  https://github.com/bakkdoor/grit (push)
+cho45     https://github.com/cho45/grit (fetch)
+cho45     https://github.com/cho45/grit (push)
+defunkt   https://github.com/defunkt/grit (fetch)
+defunkt   https://github.com/defunkt/grit (push)
+koke      git://github.com/koke/grit.git (fetch)
+koke      git://github.com/koke/grit.git (push)
+origin    git@github.com:mojombo/grit.git (fetch)
+origin    git@github.com:mojombo/grit.git (push)
+```
+
+#### Adding Remote Repositories
+
+> We’ve mentioned and given some demonstrations of how the `git clone` command implicitly adds the `origin` remote for you. Here’s how to add a new remote explicitly. To add a new remote Git repository as a shortname you can reference easily, run `git remote add <shortname> <url>`:
+
+```
+$ git remote -v
+origin  https://github.com/sait-lab/git-demo-repo.git (fetch)
+origin  https://github.com/sait-lab/git-demo-repo.git (push)
+
+$ git remote add its git@github.com:sait-its/git-demo-repo.git
+$ git remote -v
+its     git@github.com:sait-its/git-demo-repo.git (fetch)
+its     git@github.com:sait-its/git-demo-repo.git (push)
+origin  https://github.com/sait-lab/git-demo-repo.git (fetch)
+origin  https://github.com/sait-lab/git-demo-repo.git (push)
+```
+
+Now you can use the string `its` on the command line instead of the whole URL. For example, if you want to fetch all the information that Paul has but that you don’t yet have in your repository, you can run `git fetch its`
+
+```
+$ git fetch its
+From github.com:sait-its/git-demo-repo
+ * [new branch]      its        -> its/its
+ * [new branch]      main       -> its/main
+```
+
+[sait-its](https://github.com/sait-its)'s `its` branch is now accessible locally as `its/its` — you can merge it into one of your branches, or you can check out a local branch at that point if you want to inspect it. We’ll go over what branches are and how to use them in much more detail.
+
+#### Fetching and Pulling from Your Remotes
+
+> As you just saw, to get data from your remote projects, you can run:
+
+```console
+$ git fetch <remote>
+```
+
+> The command goes out to that remote project and pulls down all the data from that remote project that you don’t have yet. After you do this, you should have references to all the branches from that remote, which you can merge in or inspect at any time.
+
+> If you clone a repository, the command automatically adds that remote repository under the name “origin”. So, `git fetch origin` fetches any new work that has been pushed to that server since you cloned (or last fetched from) it. It’s important to note that the `git fetch` command only downloads the data to your local repository — it doesn’t automatically merge it with any of your work or modify what you’re currently working on. You have to merge it manually into your work when you’re ready.
+>
+> If your current branch is set up to track a remote branch (see the next section and [Git Branching](https://git-scm.com/book/en/v2/ch00/ch03-git-branching) for more information), you can use the `git pull` command to automatically fetch and then merge that remote branch into your current branch. This may be an easier or more comfortable workflow for you; and by default, the `git clone` command automatically sets up your local `main` branch to track the remote `main` branch (or whatever the default branch is called) on the server you cloned from. Running `git pull` generally fetches data from the server you originally cloned from and automatically tries to merge it into the code you’re currently working on.
+
+#### Pushing to Your Remotes
+
+> When you have your project at a point that you want to share, you have to push it upstream. The command for this is simple: `git push <remote> <branch>`. If you want to push your `main` branch to your `origin` server (again, cloning generally sets up both of those names for you automatically), then you can run this to push any commits you’ve done back up to the server:
+
+```console
+$ git push origin main
+```
+
+> This command works only if you cloned from a server to which you have write access and if nobody has pushed in the meantime. If you and someone else clone at the same time and they push upstream and then you push upstream, your push will rightly be rejected. You’ll have to fetch their work first and incorporate it into yours before you’ll be allowed to push. 
+
+> [!NOTE]
+>
+> If you remote uses https protocol, you will be prompted to type username and access token. It is recommended to use ssh protocol. [GitHub Key-Based SSH Authentication](https://github.com/sait-lab/devops/blob/main/GitHub%20Key-Based%20SSH%20Authentication.md)
+
+#### Inspecting a Remote
+
+> If you want to see more information about a particular remote, you can use the `git remote show <remote>` command. If you run this command with a particular shortname, such as `origin`, you get something like this:
+
+```
+$ git remote show origin
+* remote origin
+  Fetch URL: https://github.com/sait-lab/git-demo-repo.git
+  Push  URL: https://github.com/sait-lab/git-demo-repo.git
+  HEAD branch: main
+  Remote branch:
+    main tracked
+  Local branch configured for 'git pull':
+    main merges with remote main
+  Local ref configured for 'git push':
+    main pushes to main (fast-forwardable)
+```
+
+It lists the URL for the remote repository as well as the tracking branch information. The command helpfully tells you that if you’re on the `main` branch and you run `git pull`, it will automatically merge the remote’s `main` branch into the local one after it has been fetched. It also lists all the remote references it has pulled down.
+
+#### Renaming and Removing Remotes
+
+You can run `git remote rename` to change a remote’s shortname. For instance, if you want to rename `its` to `sadt-its`, you can do so with `git remote rename`:
+
+```
+$ git remote rename its sadt-its
+Renaming remote references: 100% (2/2), done.
+
+$ git remote -v
+origin  https://github.com/sait-lab/git-demo-repo.git (fetch)
+origin  https://github.com/sait-lab/git-demo-repo.git (push)
+sadt-its        git@github.com:sait-its/git-demo-repo.git (fetch)
+sadt-its        git@github.com:sait-its/git-demo-repo.git (push)
+```
+
+It’s worth mentioning that this changes all your remote-tracking branch names, too. What used to be referenced at `its/main` is now at `sadt-its/main`.
+
+If you want to remove a remote for some reason — you’ve moved the server or are no longer using a particular mirror, or perhaps a contributor isn’t contributing anymore — you can either use `git remote remove` or `git remote rm`:
+
+```console
+$ git remote remove sadt-its
+$ git remote
+origin
+```
+
+Once you delete the reference to a remote this way, all remote-tracking branches and configuration settings associated with that remote are also deleted.
+
+
+
+---
+
+
+
+### Tagging
+
+Git has the ability to tag specific points in a repository’s history as being important. Typically, people use this functionality to mark release points (`v1.0`, `v2.0` and so on). 
