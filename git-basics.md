@@ -303,6 +303,7 @@ nothing added to commit but untracked files present (use "git add" to track)
 > Untracked basically means that Git sees a file you didn’t have in the previous snapshot (commit), and which hasn’t yet been staged; Git won’t start including it in your commit snapshots until you explicitly tell it to do so. It does this so you don’t accidentally begin including generated binary files or other files that you did not mean to include.
 
 ![git_commands](./git-basics.assets/git_commands.png) 
+
 Credit: [Chapter 15 Git Command Line Interface (CLI) | The Shiny AWS Book (business-science.github.io)](https://business-science.github.io/shiny-production-with-aws-book/git-command-line-interface-cli.html)
 
 #### Tracking New Files
