@@ -745,7 +745,7 @@ You stage the file. But you change your mind and want to unstage it (not include
 
 #### Unmodifying a Modified File
 
-> What if you realize that you don’t want to keep your changes to the `CONTRIBUTING.md` file? How can you easily unmodify it — revert it back to what it looked like when you last committed?
+> What if you realize that you don’t want to keep your changes to the `file2.txt` file? How can you easily unmodify it — revert it back to what it looked like when you last committed?
 >
 > Use `git checkout -- <file>` to discard changes in working directory.
 
