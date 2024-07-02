@@ -272,7 +272,7 @@ Your change is now in the snapshot of the commit pointed to by the `main` branch
 
 ![basic-branching-5-log](./git-branching.assets/basic-branching-5-log.png) 
 
-After your super-important fix is deployed, you’re ready to switch back to the work you were doing before you were interrupted. However, first you’ll delete the `hotfix` branch, because you no longer need it — the `master` branch points at the same place. You can delete it with the `-d` option to `git branch`:
+After your super-important fix is deployed, you’re ready to switch back to the work you were doing before you were interrupted. However, first you’ll delete the `hotfix` branch, because you no longer need it — the `main` branch points at the same place. You can delete it with the `-d` option to `git branch`:
 
 ```
 $ git branch -d hotfix
@@ -293,5 +293,131 @@ git commit -a -m 'C5: Finish the new footer [issue 53]'
 
 It’s worth noting here that the work you did in your `hotfix` branch is not contained in the files in your `iss53` branch. If you need to pull it in, you can merge your `main` branch into your `iss53` branch by running `git merge main`, or you can wait to integrate those changes until you decide to pull the `iss53` branch back into `main` later.
 
+
+
 #### Basic Merging
+
+Suppose you’ve decided that your issue #53 work is complete and ready to be merged into your `main` branch. In order to do that, you’ll merge your `iss53` branch into `main`, much like you merged your `hotfix` branch earlier. All you have to do is check out the branch you wish to merge into and then run the `git merge` command:
+
+```
+$ git checkout main
+# Or
+$ git switch main
+
+$ git merge iss53
+```
+
+This looks a bit different than the `hotfix` merge you did earlier. In this case, your development history has diverged from some older point. Because the commit on the branch you’re on isn’t a direct ancestor of the branch you’re merging in, Git has to do some work. In this case, Git does a simple three-way merge, using the two snapshots pointed to by the branch tips and the common ancestor of the two.
+
+![basic-merging-1](./git-branching.assets/basic-merging-1.png) 
+
+Instead of just moving the branch pointer forward, Git creates a new snapshot that results from this three-way merge and automatically creates a new commit that points to it. This is referred to as a merge commit, and is special in that it has more than one parent.
+
+![basic-merging-2](./git-branching.assets/basic-merging-2.png) 
+
+Now that your work is merged in, you have no further need for the `iss53` branch. You can close the issue in your issue-tracking system, and delete the branch:
+
+```console
+$ git branch -d iss53
+```
+
+
+
+#### Basic Merge Conflicts
+
+Occasionally, this process doesn’t go smoothly. If you changed the same part of the same file differently in the two branches you’re merging, Git won’t be able to merge them cleanly. If your fix for issue #53 modified the same part of a file as the `hotfix` branch, you’ll get a merge conflict that looks something like this:
+
+```
+$ git switch main
+$ git merge iss53
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+![merge-conflict-view](./git-branching.assets/merge-conflict-view.png) 
+
+Git hasn’t automatically created a new merge commit. It has paused the process while you resolve the conflict. If you want to see which files are unmerged at any point after a merge conflict, you can run `git status`:
+
+```
+$ git status
+On branch main
+......
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+Anything that has merge conflicts and hasn’t been resolved is listed as unmerged. Git adds standard conflict-resolution markers to the files that have conflicts, so you can open them manually and resolve those conflicts. Your file contains a section that looks something like this:
+
+![conflict-markers](./git-branching.assets/conflict-markers.png) 
+
+This means the version in `HEAD` (your `main` branch, because that was what you had checked out when you ran your merge command) is the top part of that block (everything above the `=======`), while the version in your `iss53` branch looks like everything in the bottom part. In order to resolve the conflict, you have to either choose one side or the other or merge the contents yourself. For instance, you might resolve this conflict by replacing the entire block with this:
+
+```
+-= merged footer =-
+```
+
+This resolution has a little of each section, and the `<<<<<<<`, `=======`, and `>>>>>>>` lines have been completely removed. After you’ve resolved each of these sections in each conflicted file, run `git add` on each file to mark it as resolved. Staging the file marks it as resolved in Git.
+
+If you want to use a graphical tool to resolve these issues, you can run `git mergetool`, which fires up an appropriate visual merge tool and walks you through the conflicts:
+
+```
+git mergetool
+```
+
+![ext-merge-tools-cmd](./git-branching.assets/ext-merge-tools-cmd.png) 
+
+The screenshot below shows using [Neovim](https://neovim.io/) as merge tool.
+
+![merge-tool-view](./git-branching.assets/merge-tool-view.png) 
+
+The screenshot below shows using [Kaleidoscope](https://kaleidoscope.app/) as merge tool.
+
+![ext-conflict-resolver](./git-branching.assets/ext-conflict-resolver.png) 
+
+If you want to use a merge tool other than the default (Git chose `opendiff` in this case because the command was run on macOS), you can see all the supported tools listed at the top after “one of the following tools.” Just type the name of the tool you’d rather use.
+
+After you exit the merge tool, Git asks you if the merge was successful. If you tell the script that it was, it stages the file to mark it as resolved for you. You can run `git status` again to verify that all conflicts have been resolved:
+
+```
+$ git status
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 8 and 1 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   index.html
+```
+
+If you’re happy with that, and you verify that everything that had conflicts has been staged, you can type `git commit` to finalize the merge commit. The commit message by default looks something like this:
+
+```
+$ # git commit will launch the default editor
+$ git commit
+```
+
+![merge-commit-editor](./git-branching.assets/merge-commit-editor.png) 
+
+If you think it would be helpful to others looking at this merge in the future, you can modify this commit message with details about how you resolved the merge and explain why you did the changes you made if these are not obvious.
+
+![merge-commit-log-view](./git-branching.assets/merge-commit-log-view.png) 
+
+The screenshot below shows using [Fork](https://git-fork.com/) to check merged branches.
+
+![merge-commit-fork-gui-view](./git-branching.assets/merge-commit-fork-gui-view.png) 
+
+
+
+### Branch Management
 
