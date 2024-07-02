@@ -833,3 +833,8 @@ Basically all this does is to remove the pointer from the server. The Git server
 
 ### Rebasing
 
+https://git-scm.com/book/en/v2/Git-Branching-Rebasing
+
+https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase
+
+https://www.atlassian.com/git/tutorials/merging-vs-rebasing
