@@ -1,14 +1,34 @@
 ## Git Branching
 
-https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell
+### Table of Contents
 
-
+   * [Git Branching](#git-branching)
+      * [Branches in a Nutshell](#branches-in-a-nutshell)
+         * [Creating a New Branch](#creating-a-new-branch)
+         * [Switching Branches](#switching-branches)
+      * [Basic Branching and Merging](#basic-branching-and-merging)
+         * [Basic Branching](#basic-branching)
+         * [Basic Merging](#basic-merging)
+         * [Basic Merge Conflicts](#basic-merge-conflicts)
+      * [Branch Management](#branch-management)
+         * [Changing a branch name](#changing-a-branch-name)
+         * [Changing the master branch name](#changing-the-master-branch-name)
+      * [Branching Workflows](#branching-workflows)
+         * [Long-Running Branches](#long-running-branches)
+         * [Topic Branches](#topic-branches)
+      * [Remote Branches](#remote-branches)
+         * [Pushing](#pushing)
+         * [Tracking Branches](#tracking-branches)
+         * [Pulling](#pulling)
+         * [Deleting Remote Branches](#deleting-remote-branches)
+      * [Rebasing](#rebasing)
 
 ---
 
 
-
 ### Branches in a Nutshell
+
+https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell
 
 Git stores data as a series of **snapshots**.
 
