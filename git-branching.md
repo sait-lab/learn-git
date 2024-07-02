@@ -650,3 +650,186 @@ Credit: [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-wor
 
 
 ### Remote Branches
+
+Remote references are references (pointers) in your remote repositories, including branches, tags, and so on. You can get a full list of remote references explicitly with `git ls-remote <remote>`, or `git remote show <remote>` for remote branches as well as more information. Nevertheless, a more common way is to take advantage of remote-tracking branches.
+
+Remote-tracking branches are references to the state of remote branches. They’re local references that you can’t move; Git moves them for you whenever you do any network communication, to make sure they accurately represent the state of the remote repository. Think of them as bookmarks, to remind you where the branches in your remote repositories were the last time you connected to them.
+
+Remote-tracking branch names take the form `<remote>/<branch>`. For instance, if you wanted to see what the `main` branch on your `origin` remote looked like as of the last time you communicated with it, you would check the `origin/main` branch. If you were working on an issue with a partner and they pushed up an `iss53` branch, you might have your own local `iss53` branch, but the branch on the server would be represented by the remote-tracking branch `origin/iss53`.
+
+This may be a bit confusing, so let’s look at an example. Let’s say you have a Git server on your network at `git.ourcompany.com`. If you clone from this, Git’s `clone` command automatically names it `origin` for you, pulls down all its data, creates a pointer to where its `main` branch is, and names it `origin/main` locally. Git also gives you your own local `main` branch starting at the same place as origin’s `main` branch, so you have something to work from.
+
+> [!NOTE]
+>
+> “origin” is not special
+>
+> Just like the branch name “master” does not have any special meaning in Git, neither does “origin”. While “master” is the default name for a starting branch when you run `git init` which is the only reason it’s widely used, “origin” is the default name for a remote when you run `git clone`. If you run `git clone -o booyah` instead, then you will have `booyah/master` as your default remote branch.
+
+Create a fork of https://github.com/sait-lab/git-demo-repo and clone your fork to your local machine.![create-fork-of-demo-repo](./git-branching.assets/create-fork-of-demo-repo.png) 
+
+```
+git clone git@github.com:YOUR_GITHUB_USERNAME/git-demo-repo ~/git-demo-remote
+cd ~/git-demo-remote
+```
+
+![remote-branches-1-log](./git-branching.assets/remote-branches-1-log.png) 
+
+![remote-branches-1](./git-branching.assets/remote-branches-1.png) 
+
+If you do some work on your local `main` branch, and, in the meantime, someone else pushes to `github.com` and updates its `main` branch, then your histories move forward differently. Also, as long as you stay out of contact with your `origin` server, your `origin/main` pointer doesn’t move.
+
+ ![remote-and-local-commits](./git-branching.assets/remote-and-local-commits.png)  
+
+To synchronize your work with a given remote, you run a `git fetch <remote>` command (in our case, `git fetch origin`). This command looks up which server “origin” is (in this case, it’s `github.com`), fetches any data from it that you don’t yet have, and updates your local database, moving your `origin/main` pointer to its new, more up-to-date position.
+
+![remote-and-local-commits-fork](./git-branching.assets/remote-and-local-commits-fork.png) 
+
+![remote-branch-3-fetch](./git-branching.assets/remote-branch-3-fetch.png) 
+
+
+
+#### Pushing
+
+When you want to share a branch with the world, you need to push it up to a remote to which you have write access. Your local branches aren’t automatically synchronized to the remotes you write to — you have to explicitly push the branches you want to share. That way, you can use private branches for work you don’t want to share, and push up only the topic branches you want to collaborate on.
+
+If you have a branch named `serverfix` that you want to work on with others, you can push it up the same way you pushed your first branch. Run `git push <remote> <branch>`:
+
+```
+$ git switch -c serverfix
+Switched to a new branch 'serverfix'
+
+$ git push origin serverfix
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (6/6), 509 bytes | 509.00 KiB/s, done.
+Total 6 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 1 local object.
+remote:
+remote: Create a pull request for 'serverfix' on GitHub by visiting:
+remote:      https://github.com/hongyanca/git-demo-repo/pull/new/serverfix
+remote:
+To github.com:hongyanca/git-demo-repo.git
+ * [new branch]      serverfix -> serverfix
+```
+
+![push-serverfix-branch](./git-branching.assets/push-serverfix-branch.png) 
+
+> The next time one of your collaborators fetches from the server, they will get a reference to where the server’s version of `serverfix` is under the remote branch `origin/serverfix`:
+>
+>```console
+>$ git fetch origin
+>```
+>
+> It’s important to note that when you do a fetch that brings down new remote-tracking branches, you don’t automatically have local, editable copies of them. In other words, in this case, you don’t have a new `serverfix` branch — you have only an `origin/serverfix` pointer that you can’t modify.
+>
+> To merge this work into your current working branch, you can run `git merge origin/serverfix`. If you want your own `serverfix` branch that you can work on, you can base it off your remote-tracking branch:
+>
+>```console
+>$ git checkout -b serverfix origin/serverfix
+>Branch serverfix set up to track remote branch serverfix from origin.
+>Switched to a new branch 'serverfix'
+>```
+>
+> This gives you a local branch that you can work on that starts where `origin/serverfix` is.
+
+Let's simulate this situation by creating a new `clientfix` branch on GitHub's web interface.
+
+![create-clientfix-branch-on-gh](./git-branching.assets/create-clientfix-branch-on-gh.png) 
+
+```
+$ git fetch origin
+From github.com:hongyanca/git-demo-repo
+ * [new branch]      clientfix  -> origin/clientfix
+
+$ git checkout -b clientfix origin/clientfix
+branch 'clientfix' set up to track 'origin/clientfix'.
+Switched to a new branch 'clientfix'
+```
+
+![fetch-origin-new-local-branch](./git-branching.assets/fetch-origin-new-local-branch.png) 
+
+
+
+#### Tracking Branches
+
+Checking out a local branch from a remote-tracking branch automatically creates what is called a “tracking branch” (and the branch it tracks is called an “upstream branch”). Tracking branches are local branches that have a direct relationship to a remote branch. If you’re on a tracking branch and type `git pull`, Git automatically knows which server to fetch from and which branch to merge in.
+
+When you clone a repository, it generally automatically creates a `main` branch that tracks `origin/main`. However, you can set up other tracking branches if you wish — ones that track branches on other remotes, or don’t track the `main` branch. The simple case is the example you just saw, running `git checkout -b <branch> <remote>/<branch>`. This is a common enough operation that Git provides the `--track` shorthand.
+
+In fact, this is so common that there’s even a shortcut for that shortcut. If the branch name you’re trying to checkout (a) doesn’t exist and (b) exactly matches a name on only one remote, Git will create a tracking branch for you:
+
+```console
+$ git checkout clientfix
+```
+
+To set up a local branch with a different name than the remote branch, you can easily use the first version with a different local branch name:
+
+```console
+$ git checkout -b sf origin/serverfix
+Branch sf set up to track remote branch serverfix from origin.
+Switched to a new branch 'sf'
+```
+
+![checkout-b-own-branch](./git-branching.assets/checkout-b-own-branch.png) 
+
+Now, your local branch `sf` will automatically pull from `origin/serverfix`.
+
+If you already have a local branch and want to set it to a remote branch you just pulled down, or want to change the upstream branch you’re tracking, you can use the `-u` or `--set-upstream-to` option to `git branch` to explicitly set it at any time.
+
+```console
+$ git switch -c cf
+$ git branch -u origin/clientfix
+branch 'cf' set up to track 'origin/clientfix'.
+```
+
+![set-upstream](./git-branching.assets/set-upstream.png) 
+
+If you want to see what tracking branches you have set up, you can use the `-vv` option to `git branch`. This will list out your local branches with more information including what each branch is tracking and if your local branch is ahead, behind or both.
+
+```console
+$ git branch -vv
+* cf        d2d1e83 [origin/clientfix: ahead 2, behind 2] local update 2
+  clientfix 11e02f8 [origin/clientfix] remote update 2
+  main      d2d1e83 [origin/main: ahead 2, behind 2] local update 2
+  serverfix d2d1e83 local update 2
+  sf        d2d1e83 [origin/serverfix] local update 2
+```
+
+It’s important to note that these numbers are only since the last time you fetched from each server. This command does not reach out to the servers, it’s telling you about what it has cached from these servers locally. If you want totally up to date ahead and behind numbers, you’ll need to fetch from all your remotes right before running this. You could do that like this:
+
+```console
+$ git fetch --all; git branch -vv
+```
+
+
+
+#### Pulling
+
+While the **`git fetch`** command will fetch all the changes on the server that you don’t have yet, it **will not modify your working directory at all**. It will simply get the data for you and let you merge it yourself. However, there is a command called `git pull` which is essentially a `git fetch` immediately followed by a `git merge` in most cases. If you have a tracking branch set up as demonstrated in the last section, either by explicitly setting it or by having it created for you by the `clone` or `checkout` commands, `git pull` will look up what server and branch your current branch is tracking, fetch from that server and then try to merge in that remote branch.
+
+Generally it’s better to simply use the `fetch` and `merge` commands explicitly as the magic of `git pull` can often be confusing.
+
+
+
+#### Deleting Remote Branches
+
+Suppose you’re done with a remote branch — say you and your collaborators are finished with a feature and have merged it into your remote’s `master` branch (or whatever branch your stable codeline is in). You can delete a remote branch using the `--delete` option to `git push`. If you want to delete your `serverfix` branch from the server, you run the following:
+
+```console
+$ git push origin --delete serverfix
+To github.com:hongyanca/git-demo-repo.git
+ - [deleted]         serverfix
+```
+
+Basically all this does is to remove the pointer from the server. The Git server will generally keep the data there for a while until a garbage collection runs, so if it was accidentally deleted, it’s often easy to recover.
+
+
+
+---
+
+
+
+### Rebasing
+
