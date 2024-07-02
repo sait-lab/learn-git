@@ -606,6 +606,43 @@ Now, let’s say you decide you like the second solution to your issue best (`is
 
 It’s important to remember when you’re doing all this that these branches are completely local. When you’re branching and merging, everything is being done only in your Git repository — there is no communication with the server.
 
+https://www.gitkraken.com/learn/git/best-practices/git-branch-strategy
+
+[GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow)
+
+The diagram below shows vertical view of GitHub flow.
+
+<img src="./git-branching.assets/github-flow.png" alt="github-flow" style="zoom: 50%;" /> 
+
+>The GitHub flow branching strategy is a relatively simple workflow that allows smaller teams, or web applications/products that don’t require supporting multiple versions, to expedite their work.
+>
+>In [GitHub flow](https://githubflow.github.io/), the main branch contains your production-ready code.
+>
+>The other branches, feature branches, should contain work on new features and bug fixes and will be merged back into the main branch when the work is finished and properly reviewed.
+
+The diagram below shows horizontal view of GitHub flow.
+
+![github-flow-hotfix](./git-branching.assets/github-flow-hotfix.png) 
+
+![github-flow-release](./git-branching.assets/github-flow-release.png) 
+
+Credit: [Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+
+[GitLab Flow](https://about.gitlab.com/topics/version-control/what-is-gitlab-flow/)
+
+<img src="./git-branching.assets/gitlab-flow.png" alt="gitlab-flow" style="zoom:50%;" /> 
+
+>At its core, the GitLab flow branching strategy is a clearly-defined workflow. While similar to the GitHub flow branch strategy, the main differentiator is the addition of environment branches—ie production and pre-production—or release branches, depending on the situation.
+>
+>Just as in the other two Git branch strategies, [GitLab flow](https://docs.gitlab.com/ee/topics/gitlab_flow.html) has a main branch that contains code that is ready to be deployed. However, this code is not the source of truth for releases.
+>
+>In GitLab flow, the feature branch contains work for new features and bug fixes which will be merged back into the main branch when they’re finished, reviewed, and approved.
+>
+>The GitLab flow branching strategy works with two different types of release cycles:
+>
+>1. Versioned Release: each release has an associated release branch that is based off the main branch. Bug fixes should be merged into the main branch first, before being cherry-picked into the release branch.
+>2. Continuous Release: production branches are utilized to contain deployment-ready code, so code is merged into the production branch when it’s ready to be released.
+
 
 
 ---
