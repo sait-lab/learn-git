@@ -2,7 +2,7 @@
 
 https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow
 
-> The Forking Workflow is fundamentally different than other popular Git workflows. Instead of using a single server-side repository to act as the “central” codebase, it gives every developer their own server-side repository. This means that each contributor has not one, but two Git repositories: a private local one and a public server-side one. The Forking Workflow is most often seen in public open source projects.
+> The Forking Workflow is fundamentally different than other popular Git workflows. Instead of using a single server-side repository to act as the "central" codebase, it gives every developer their own server-side repository. This means that each contributor has not one, but two Git repositories: a private local one and a public server-side one. The Forking Workflow is most often seen in public open source projects.
 
 > The main advantage of the Forking Workflow is that contributions can be integrated without the need for everybody to push to a single central repository. Developers push to their own server-side repositories, and only the project maintainer can push to the official repository. This allows the maintainer to accept commits from any developer without giving them write access to the official codebase.
 
@@ -16,7 +16,8 @@ https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
 
 1. A developer 'forks' an 'official' server-side repository. This creates their own server-side copy.
 
-   To fork a project, visit the project page and click the “Fork” button at the top-right of the page. This creates a fork of the repo to `github.com/YOUR_GITHUB_USERNAME/project`.
+   To fork a project, visit the project page and click the "Fork" button at the top-right of the page. This creates a fork of the repo to `github.com/YOUR_GITHUB_USERNAME/project`.
+
    ![fork-1](./forking-workflow.assets/fork-1.png) 
 
    ![fork-2](./forking-workflow.assets/fork-2.png) 
@@ -48,7 +49,7 @@ https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
    ![owner-view-1](./forking-workflow.assets/owner-view-1.png) 
 
    ![owner-view-2](./forking-workflow.assets/owner-view-2.png) 
-    
+   
 
    ![owner-view-3](./forking-workflow.assets/owner-view-3.png) 
 

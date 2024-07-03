@@ -3,6 +3,10 @@
 ### Table of Contents
 
    * [Git Branching](#git-branching)
+      * [Git Objects](#git-objects)
+         * [Blob Object](#blob-object)
+         * [Tree Objects](#tree-objects)
+         * [Commit Objects](#commit-objects)
       * [Branches in a Nutshell](#branches-in-a-nutshell)
          * [Creating a New Branch](#creating-a-new-branch)
          * [Switching Branches](#switching-branches)
@@ -23,7 +27,84 @@
          * [Deleting Remote Branches](#deleting-remote-branches)
       * [Rebasing](#rebasing)
 
+
 ---
+
+
+### Git Objects
+
+https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
+
+Git has 3 types of objects: blob, tree and commit.
+
+#### Blob Objects
+
+A Git blob (binary large object) is the object type used to store the contents of each file in a repository. The file's SHA-1 hash is computed and stored in the blob object.
+
+First, you initialize a new Git repository and verify that there is (predictably) nothing in the `objects` directory:
+
+```
+rm -rf ~/git-demo/git-obj-demo
+mkdir -p ~/git-demo/git-obj-demo
+cd ~/git-demo/git-obj-demo
+git init
+
+# Remove .git/hooks folder for a clear view of .git tree
+rm -rf .git/hooks
+```
+
+Open another terminal session and user `watch` command to observe the changes in `.git` folder.
+
+```
+watch -n 1 tree .git
+```
+
+![empty-prj-folder](./git-branching.assets/empty-prj-folder.png) 
+
+Create a new file. Since it's untracked, no Git objects will be created.
+
+![obj-create-a-new-file](./git-branching.assets/obj-create-a-new-file.png) 
+
+Use `git add` to track the created file. [Tracking New Files](git-basics.md#tracking-new-files)
+
+![obj-git-add-a-new-file](./git-branching.assets/obj-git-add-a-new-file.png) 
+
+You can use `git cat -file -p HASH_OF_BLOB_OBJECT` to inspect the content of the object.
+
+You can have Git tell you the object type of any object in Git, given its SHA-1 key, with `git cat-file -t`:
+
+```console
+$ git cat-file -t HASH_OF_BLOB_OBJECT
+blob
+```
+
+#### Tree Objects
+
+> Tree object solves the problem of storing the filename and also allows you to store a group of files together. Git stores content in a manner similar to a UNIX filesystem, but a bit simplified. All the content is stored as tree and blob objects, with trees corresponding to UNIX directory entries and blobs corresponding more or less to inodes or file contents. A single tree object contains one or more entries, each of which is the SHA-1 hash of a blob or subtree with its associated mode, type, and filename.
+
+#### Commit Objects
+
+Create a subfolder and add two files under it. Use `git add` to track them.
+
+![obj-git-add-3rd-file](./git-branching.assets/obj-git-add-3rd-file.png) 
+
+Commit all three files. Note that there are six objects in total: one commit object, two tree objects, three blob object.
+
+![obj-git-show](./git-branching.assets/obj-git-show.png)  
+
+> The format for a commit object is simple: it specifies the top-level tree for the snapshot of the project at that point; the parent commits if any (the commit object described above does not have any parents); the author/committer information (which uses your `user.name` and `user.email` configuration settings and a timestamp); a blank line, and then the commit message.
+
+```
+git cat-file -p 689a764
+tree 37a3d8dfeb6c6f030ee5425f6146fbd90dd651df
+author AUTHOR_INFO 1719984322 -0600
+committer COMMITTER_INFO 1719984322 -0600
+```
+
+
+
+---
+
 
 
 ### Branches in a Nutshell
@@ -34,9 +115,7 @@ Git stores data as a series of **snapshots**.
 
 > When you make a commit, Git stores a commit object that contains a pointer to the snapshot of the content you staged. This object also contains the author’s name and email address, the message that you typed, and pointers to the commit or commits that directly came before this commit (its parent or parents): zero parents for the initial commit, one parent for a normal commit, and multiple parents for a commit that results from a merge of two or more branches.
 
-Todo:
 
-- [ ] Show blob, tree and commit objects in `.git` folder.
 
 ![branch-and-history](./git-branching.assets/branch-and-history.png) 
 
