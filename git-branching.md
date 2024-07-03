@@ -678,7 +678,7 @@ https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows
 
 [A Git Workflow for Data Teams (getdbt.com)](https://www.getdbt.com/analytics-engineering/transformation/git-workflow)
 
-![long-running-workflow](./git-branching.assets/long-running-workflow.png) 
+ 
 
 1. Clone the original codebase
 2. Create your development branch

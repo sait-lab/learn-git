@@ -14,6 +14,9 @@ https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
 
 >This way, projects don’t have to worry about adding users as collaborators to give them push access. People can fork a project, push to it, and contribute their changes back to the original repository by creating what’s called a Pull Request, which we’ll cover next. This opens up a discussion thread with code review, and the owner and the contributor can then communicate about the change until the owner is happy with it, at which point the owner can merge it in.
 
+![open-source-workflow](./forking-workflow.assets/open-source-workflow.png) 
+Credit: [(9) Git and GitHub demystified: A Guide to Open Source Contribution | LinkedIn](https://www.linkedin.com/pulse/git-github-demystified-guide-open-source-contribution-nishan-baral-i4ndc/)
+
 1. A developer 'forks' an 'official' server-side repository. This creates their own server-side copy.
 
    To fork a project, visit the project page and click the "Fork" button at the top-right of the page. This creates a fork of the repo to `github.com/YOUR_GITHUB_USERNAME/project`.
@@ -59,18 +62,5 @@ https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project
    ![sync-main-back-2](./forking-workflow.assets/sync-main-back-2.png) 
 
 > The Forking Workflow helps a maintainer of a project open up the repository to contributions from any developer without having to manually manage authorization settings for each individual contributor. This gives the maintainer more of a "pull" style workflow. Most commonly used in open-source projects, the Forking Workflow can also be applied to private business workflows to give more authoritative control over what is merged into a release. This can be useful in teams that have Deploy Managers or strict release cycles.
-
-
-
-
-
- 
-
- 
-
- 
-
-
-
 
 
