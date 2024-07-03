@@ -28,6 +28,10 @@ This document is about using GitHub effectively. We’ll cover signing up for an
 
 [git_cheat_sheet.pdf (datacamp.com)](https://images.datacamp.com/image/upload/v1656573882/Marketing/Blog/git_cheat_sheet.pdf)
 
+https://ohshitgit.com/ or https://dangitgit.com/en
+
+[17 Ways to Undo Mistakes with Git](https://www.git-tower.com/blog/surviving-with-git-videos/)
+
 ## Contributing
 
 Feel free to fork this repository and submit pull requests with improvements to the documents or suggestions for additional guides. Your contributions are highly appreciated!
