@@ -685,7 +685,7 @@ This may be a bit confusing, so let’s look at an example. Let’s say you have
 >
 > Just like the branch name “master” does not have any special meaning in Git, neither does “origin”. While “master” is the default name for a starting branch when you run `git init` which is the only reason it’s widely used, “origin” is the default name for a remote when you run `git clone`. If you run `git clone -o booyah` instead, then you will have `booyah/master` as your default remote branch.
 
-Create a fork of https://github.com/sait-lab/git-demo-repo and clone your fork to your local machine.![create-fork-of-demo-repo](./git-branching.assets/create-fork-of-demo-repo.png) 
+Create a fork of https://github.com/sait-lab/git-demo-repo and clone your fork to your local machine. Read [Forking Workflow](forking-workflow.md) for more information.![create-fork-of-demo-repo](./git-branching.assets/create-fork-of-demo-repo.png) 
 
 ```
 git clone git@github.com:YOUR_GITHUB_USERNAME/git-demo-repo ~/git-demo-remote
