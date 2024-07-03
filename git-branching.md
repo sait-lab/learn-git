@@ -87,7 +87,7 @@ blob
 
 Create a subfolder and add two files under it. Use `git add` to track them.
 
-![obj-git-add-3rd-file](./git-branching.assets/obj-git-add-3rd-file.png) 
+![obj-git-create-fs-tree](./git-branching.assets/obj-git-create-fs-tree.png) 
 
 Commit all three files. Note that there are six objects in total: one commit object, two tree objects, three blob object.
 
