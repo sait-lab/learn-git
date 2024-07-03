@@ -70,7 +70,7 @@ Use `git add` to track the created file. [Tracking New Files](git-basics.md#trac
 
 ![obj-git-add-a-new-file](./git-branching.assets/obj-git-add-a-new-file.png) 
 
-You can use `git cat -file -p HASH_OF_BLOB_OBJECT` to inspect the content of the object.
+You can use `git cat-file -p HASH_OF_BLOB_OBJECT` to inspect the content of the object.
 
 You can have Git tell you the object type of any object in Git, given its SHA-1 key, with `git cat-file -t`:
 
