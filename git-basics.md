@@ -592,9 +592,9 @@ $ git mv file_from file_to
 > However, this is equivalent to running something like this:
 
 ```console
-$ mv file-2.txt file2.txt
-$ git rm file-2.txt
-$ git add file2.txt
+$ mv file2.txt file-2.txt
+$ git rm file2.txt
+$ git add file-2.txt
 ```
 
 
