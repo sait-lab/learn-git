@@ -747,13 +747,13 @@ You stage the file. But you change your mind and want to unstage it (not include
 
 > What if you realize that you don’t want to keep your changes to the `file2.txt` file? How can you easily unmodify it — revert it back to what it looked like when you last committed?
 >
-> Use `git checkout -- <file>` to discard changes in working directory.
+> Use `git checkout -- <file>` or `git restore <file>` to discard changes in working directory.
 
 ![unmodify-file](./git-basics.assets/unmodify-file.jpg) 
 
 > [!IMPORTANT]
 >
-> It’s important to understand that `git restore <file>` is a dangerous command. Any local changes you made to that file are gone — Git just replaced that file with the last staged or committed version. Don’t ever use this command unless you absolutely know that you don’t want those unsaved local changes.
+> It’s important to understand that `git checkout -- <file>` or `git restore <file>` is a dangerous command. Any local changes you made to that file are gone — Git just replaced that file with the last staged or committed version. Don’t ever use this command unless you absolutely know that you don’t want those unsaved local changes.
 
 
 
