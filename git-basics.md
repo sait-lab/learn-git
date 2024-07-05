@@ -294,10 +294,14 @@ nothing to commit, working tree clean
 Add a new file to this project, a simple `MY-NOTES.md` file. If the file didn’t exist before, and you run `git status`, you see your untracked file like so:
 
 ```
-$ # Create a MY-NOTES.md file
-$ echo 'This file contains my notes' > MY-NOTES.md
-$ git status
+# Create a MY-NOTES.md file
+echo 'This file contains my notes' > MY-NOTES.md
+```
 
+Check the status again:
+
+```
+$ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -318,14 +322,14 @@ Credit: [Chapter 15 Git Command Line Interface (CLI) | The Shiny AWS Book (busin
 
 Use the command `git add` to track a new file.
 
-```
-$ git add MY-NOTES.md
+```shell
+git add MY-NOTES.md
 ```
 
 If you run your status command again, you can see that your `MY-NOTES` file is now tracked and staged to be committed:
 
 ```
-git status
+$ git status
 On branch main
 Your branch is up to date with 'origin/main'.
 
@@ -343,14 +347,25 @@ Changes to be committed:
 
 #### Staging Modified Files
 
-> If you change a previously tracked file called `README` and then run your `git status` command again, you get something that looks like this:
+Change the previously tracked file called `README`:
+
+```shell
+echo 'learn git' >> README
+git status
+```
+
+You get something that looks like this:
 
 ![modify-readme](./git-basics.assets/modify-readme.jpg) 
 
 > The `README` file appears under a section named "Changes not staged for commit" — which means that a file that is tracked has been modified in the working directory but not yet staged. To stage it, you run the `git add` command. `git add` is a **multipurpose** command — you use it to begin tracking new files, to stage files, and to do other things like marking merge-conflicted files as resolved. It may be helpful to think of it more as "add precisely this content to the next commit" rather than "add this file to the project". Let’s run `git add` now to stage the `README` file, and then run `git status` again:
 
+```shell
+git add README
 ```
-$ git add README
+
+
+```
 $ git status
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -361,14 +376,23 @@ Changes to be committed:
         modified:   README
 ```
 
-> Both files are staged and will go into your next commit. At this point, suppose you remember one little change (`echo 'git is a powerful tool' >> README`) that you want to make in `README` before you commit it. You open it again and make that change, and you’re ready to commit. However, let’s run `git status` one more time:
+Both files are staged and will go into your next commit. At this point, suppose you remember one little change that you want to make in `README` before you commit it.
+
+```shell
+echo 'git is a powerful tool' >> README
+```
+
+You open it again and make that change, and you’re ready to commit. However, let’s run `git status` one more time:
 
 ![modify-readme-after-add](./git-basics.assets/modify-readme-after-add.jpg) 
 
 > Now `README` is listed as both staged *and* unstaged. How is that possible? It turns out that Git stages a file exactly as it is when you run the `git add` command. If you commit now, the version of `README` as it was when you last ran the `git add` command is how it will go into the commit, not the version of the file as it looks in your working directory when you run `git commit`. If you modify a file after you run `git add`, you have to run `git add` again to stage the latest version of the file:
 
+```shell
+git add README
 ```
-$ git add README
+
+```
 $ git status
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -382,6 +406,10 @@ Changes to be committed:
 #### Short Status
 
 If you run `git status -s` or `git status --short` you get a far more simplified output from the command:
+
+```shell
+git status -s
+```
 
 ```
 $ git status -s
@@ -431,13 +459,16 @@ doc/**/*.pdf
 
 > If the `git status` command is too vague for you — you want to know exactly what you changed, not just which files were changed — you can use the `git diff` command. We’ll cover `git diff` in more detail later, but you’ll probably use it most often to answer these two questions: What have you changed but not yet staged? And what have you staged that you are about to commit? Although `git status` answers those questions very generally by listing the file names, `git diff` shows you the exact lines added and removed — the patch, as it were.
 
-Let’s say you edit and stage the `MY-NOTES.md` file again and then edit the `README` file without staging it. If you run your `git status` command, you once again see something like this:
+Let’s say you edit and stage the `MY-NOTES.md` file again and then edit the `README` file without staging it. 
 
+```shell
+echo 'these notes are helpful' >> MY-NOTES.md
+git add MY-NOTES.md
+git add README
+echo 'keep working on labs' >> README
 ```
-$ echo 'these notes are helpful' >> MY-NOTES.md
-$ git add MY-NOTES.md
-$ git add README
-$ echo 'keep working on labs' >> README
+If you run your `git status` command, you once again see something like this:
+```
 $ git status
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -455,6 +486,10 @@ Changes not staged for commit:
 
 > To see what you’ve changed but not yet staged, type `git diff` with no other arguments. That command compares what is in your working directory with what is in your staging area. The result tells you the changes you’ve made that you haven’t yet staged.
 
+```shell
+git diff
+```
+
 ![git-diff](./git-basics.assets/git-diff.jpg) 
 
 `git diff --staged` will compare your staged changes against the previous commit.
@@ -467,12 +502,16 @@ Changes not staged for commit:
 
 > It’s important to note that `git diff` by itself doesn’t show all changes made since your last commit — only changes that are still unstaged. If you’ve staged all of your changes, `git diff` will give you no output.
 
-```
-$ git add .
-$ git diff
+```shell
+git add .
+git diff
 ```
 
 > and `git diff --cached` to see what you’ve staged so far (`--staged` and `--cached` are synonyms):
+
+```shell
+git diff --cached
+```
 
 ```
 $ git diff --cached
@@ -499,7 +538,21 @@ index ecb469a..1bca90c 100644
 >
 > **Git Diff in an External Tool**
 >
-> We will continue to use the git diff command in various ways throughout the rest of the book. There is another way to look at these diffs if you prefer a graphical or external diff viewing program instead. If you run git difftool instead of git diff, you can view any of these diffs in software like emerge, vimdiff and many more (including commercial products). Run `git difftool --tool-help` to see what is available on your system.
+> We will continue to use the git diff command in various ways throughout the rest of the book. There is another way to look at these diffs if you prefer a graphical or external diff viewing program instead. If you run `git difftool` instead of `git diff`, you can view any of these diffs in software like Meld, emerge, vimdiff and many more (including commercial products). Run `git difftool --tool-help` to see what is available on your system.
+>
+> ![git-difftool-tool-help](./git-basics.assets/git-difftool-tool-help.webp) 
+>
+> The screenshot below shows an example of using [Meld](https://meldmerge.org/) as `git difftool` on Windows.
+> ![git-difftool-meld](./git-basics.assets/git-difftool-meld.webp)
+>
+> To configure Meld as `git difftool` on Windows, edit `"%USERPROFILE%\.gitconfig"` file, add the following lines:
+>
+> ```
+> [diff]
+>     tool = meld
+> [difftool "meld"]
+>     cmd = \"C:/Program Files/Meld/meld.exe\" $REMOTE $LOCAL
+> ```
 >
 > The screenshot below shows an example of using [Kaleidoscope](https://kaleidoscope.app/) as `git difftool` on macOS.![git-diff-ext-macos](./git-basics.assets/git-diff-ext-macos.png) 
 >
