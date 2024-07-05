@@ -34,6 +34,7 @@
       * [Viewing the Commit History](#viewing-the-commit-history)
       * [Undoing Things](#undoing-things)
          * [Redo the commit](#redo-the-commit)
+         * [Changing committed files](#changing-committed-files)
          * [Unstaging a Staged File](#unstaging-a-staged-file)
          * [Unmodifying a Modified File](#unmodifying-a-modified-file)
       * [Working with Remotes](#working-with-remotes)
@@ -545,7 +546,7 @@ index ecb469a..1bca90c 100644
 > The screenshot below shows an example of using [Meld](https://meldmerge.org/) as `git difftool` on Windows.
 > ![git-difftool-meld](./git-basics.assets/git-difftool-meld.webp)
 >
-> To configure Meld as `git difftool` on Windows, edit `"%USERPROFILE%\.gitconfig"` file, add the following lines:
+> To configure Meld as `git difftool` on Windows, open `"%USERPROFILE%\.gitconfig"` file and add the following lines:
 >
 > ```
 > [diff]
@@ -565,8 +566,8 @@ index ecb469a..1bca90c 100644
 
 >Now that your staging area is set up the way you want it, you can commit your changes. Remember that anything that is still unstaged — any files you have created or modified that you haven’t run `git add` on since you edited them — won’t go into this commit. They will stay as modified files on your disk. In this case, let’s say that the last time you ran `git status`, you saw that everything was staged, so you’re ready to commit your changes. The simplest way to commit is to type `git commit`:
 
-```console
-$ git commit
+```shell
+git commit
 ```
 
 > Doing so launches your editor of choice.
@@ -591,10 +592,13 @@ The editor displays the following text (this example is a Neovim screen):
 
 > Alternatively, you can type your commit message inline with the `commit` command by specifying it after a `-m` flag, like this:
 
+```shell
+echo 'note 1: get your hands dirty and learn' >> MY-NOTES.md
+git add MY-NOTES.md
+git commit -m 'docs: add first note'
 ```
-$ echo 'note 1: get your hands dirty and learn' >> MY-NOTES.md
-$ git add MY-NOTES.md
-$ git commit -m 'docs: add first note'
+
+```
 [main 112baf8] style: docs: add first note
  1 file changed, 1 insertion(+)
 ```
@@ -607,8 +611,11 @@ $ git commit -m 'docs: add first note'
 
 > Although it can be amazingly useful for crafting commits exactly how you want them, the staging area is sometimes a bit more complex than you need in your workflow. If you want to skip the staging area, Git provides a simple shortcut. Adding the `-a` option to the `git commit` command makes Git automatically stage every file that is already tracked before doing the commit, letting you skip the `git add` part:
 
+```shell
+echo 'youtube is a great educational resource' >> README
 ```
-$ echo 'youtube is a great educational resource' >> README
+
+```
 $ git status
 On branch main
 Your branch is ahead of 'origin/main' by 2 commits.
@@ -621,9 +628,10 @@ Changes not staged for commit:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
-
+```shell
+git commit -a -m 'docs: add youtube line'
 ```
-$ git commit -a -m 'docs: add youtube line'
+```
 [main cb0c4b9] docs: add youtube line
  1 file changed, 1 insertion(+)
 ```
@@ -638,24 +646,40 @@ $ git commit -a -m 'docs: add youtube line'
 >
 > Another useful thing you may want to do is to keep the file in your working tree but remove it from your staging area. This is particularly useful if you forgot to add something to your `.gitignore` file and accidentally staged it, like a large log file or a bunch of `.a` compiled files. To do this, use the `--cached` option:
 
+```shell
+echo 'second file' > file2.txt
+git add file2.txt
+git status
+
+git rm --cached file2.txt
+git status
+```
+
 ![git-rm-cached](./git-basics.assets/git-rm-cached.jpg) 
 
 #### Moving Files
 
->If you want to rename a file in Git, you can run something like:
+If you want to rename a file in Git, you can run something like `git mv file_from file_to`
 
-```console
-$ git mv file_from file_to
+```shell
+echo 'second file' > file2.txt
+git add file2.txt
+git status
+
+git mv file2.txt file-2.txt
+git status
+
+ls -l
 ```
 
 ![git-mv](./git-basics.assets/git-mv.jpg) 
 
 > However, this is equivalent to running something like this:
 
-```console
-$ mv file2.txt file-2.txt
-$ git rm file2.txt
-$ git add file-2.txt
+```shell
+mv file2.txt file-2.txt
+git rm file2.txt
+git add file-2.txt
 ```
 
 
@@ -764,13 +788,9 @@ cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main) docs: add youtube line
 
 #### Redo the commit
 
->When you commit too early and possibly forget to add some files, or you mess up your commit message. If you want to redo that commit, make the additional changes you forgot, stage them, and commit again using the `--amend` option:
-
-```console
-$ git commit --amend
-```
-
-> This command takes your staging area and uses it for the commit. If you’ve made no changes since your last commit (for instance, you run this command immediately after your previous commit), then your snapshot will look exactly the same, and all you’ll change is your commit message.
+>When you commit too early and possibly forget to add some files, or you mess up your commit message. If you want to redo that commit, make the additional changes you forgot, stage them, and commit again using the `--amend` option `git commit --amend`
+>
+>This command takes your staging area and uses it for the commit. If you’ve made no changes since your last commit (for instance, you run this command immediately after your previous commit), then your snapshot will look exactly the same, and all you’ll change is your commit message.
 
 ```
 $ git log --pretty=oneline -n 3
@@ -781,7 +801,13 @@ cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main) docs: add youtube line
 
 > [!NOTE]  
 >
-> `git log` with ` -n 3` shows 3 latest commits only.
+> `git log` with ` -n 3` argument shows 3 latest commits only.
+
+```shell
+git log --pretty=oneline -n 3
+git commit --amend -m "add youtube as a resource line"
+git log --pretty=oneline -n 3
+```
 
 ![git-commit-amend](./git-basics.assets/git-commit-amend.jpg) 
 
@@ -793,6 +819,25 @@ cb0c4b934833f90ee001057a16619860fd6f3673 (HEAD -> main) docs: add youtube line
 > The obvious value to amending commits is to make minor improvements to your last commit, without cluttering your repository history with commit messages of the form, "Oops, forgot to add a file" or "Darn, fixing a typo in last commit".
 >
 > Only amend commits that are still local and have not been pushed somewhere. Amending previously pushed commits and force pushing the branch will cause problems for your collaborators.
+
+#### Changing committed files
+
+Excerpt from [git amend | Atlassian Git Tutorial](https://www.atlassian.com/git/tutorials/rewriting-history)
+
+> Let's say we've edited a few files that we would like to commit in a single snapshot, but then we forget to add one of the files the first time around. Fixing the error is simply a matter of staging the other file and committing with the `--amend` flag:
+>
+> ```
+> # Edit hello.py and main.py
+> git add hello.py
+> git commit 
+> # Realize you forgot to add the changes from main.py 
+> git add main.py 
+> git commit --amend --no-edit
+> ```
+
+```shell
+git commit --amend --no-edit
+```
 
 #### Unstaging a Staged File
 
