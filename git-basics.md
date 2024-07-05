@@ -230,21 +230,29 @@ git commit -m 'Initial project version'
 >
 > You clone a repository with `git clone <url>`. 
 
-For example, if you want to clone this repository, you can do so like this:
+Read [Forking Workflow](forking-workflow.md) step 1 and 2. Fork https://github.com/sait-lab/git-demo-repo.git to your own GitHub account. Set up [GitHub Key-Based SSH Authentication](https://github.com/sait-lab/devops/blob/main/GitHub%20Key-Based%20SSH%20Authentication.md).
+
+For example, if you want to clone the mode repository used in this document, you can do so like this:
 
 ```shell
-git clone https://github.com/sait-lab/git-demo-repo.git
+git clone https://github.com/YOUR_GITHUB_USERNAME/git-demo-repo.git
+
+# Or use SSH as transfer protocol
+git clone git@github.com:YOUR_GITHUB_USERNAME/git-demo-repo.git
 ```
 
 That creates a directory named `git-basics`, initializes a `.git` directory inside it, pulls down all the data for that repository, and checks out a working copy of the latest version. If you go into the new `git-basics` directory that was just created, you’ll see the project files in there, ready to be worked on or used.
 
 If you want to clone the repository into a directory named something other than `git-demo-repo`, you can specify the new directory name as an additional argument:
 
-```
-git clone https://github.com/sait-lab/git-demo-repo.git ~/my-git-demo-repo
+```shell
+git clone https://github.com/YOUR_GITHUB_USERNAME/git-demo-repo.git ~/my-git-demo-repo
+
+# Or use SSH as transfer protocol
+git clone git@github.com:YOUR_GITHUB_USERNAME/git-demo-repo.git ~/my-git-demo-repo
 ```
 
-That command does the same thing as the previous one, but the target directory is called `my-git-demo-repo`.
+That command does the same thing as the previous one, but the remote repository is cloned to the target directory called `my-git-demo-repo`.
 
 Git has a number of different transfer protocols you can use. The previous example uses the `https://` protocol, but you may also see `git://` or `user@server:path/to/repo.git`, which uses the SSH transfer protocol.
 
