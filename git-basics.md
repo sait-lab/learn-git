@@ -843,9 +843,24 @@ git commit --amend --no-edit
 
 You have added and committed a new file `file2.txt`. Then you made changes to the file.
 
+```shell
+echo 'second file' > file2.txt
+git add file2.txt
+git status
+git commit -m 'docs: add second file'
+echo 'Lorem Ipsum' >> file2.txt
+```
+
 ![before-reset](./git-basics.assets/before-reset.jpg) 
 
 You stage the file. But you change your mind and want to unstage it (not include it in the next commit). You can use `git restore --staged` command.
+
+```shell
+git add file2.txt
+git status
+git restore --staged file2.txt
+git status
+```
 
 ![git-restore-staged](./git-basics.assets/git-restore-staged.png) 
 
@@ -854,6 +869,12 @@ You stage the file. But you change your mind and want to unstage it (not include
 > What if you realize that you don’t want to keep your changes to the `file2.txt` file? How can you easily unmodify it — revert it back to what it looked like when you last committed?
 >
 > Use `git checkout -- <file>` or `git restore <file>` to discard changes in working directory.
+
+```shell
+cat file2.txt
+git checkout -- file2.txt
+cat file2.txt
+```
 
 ![unmodify-file](./git-basics.assets/unmodify-file.jpg) 
 
@@ -902,11 +923,22 @@ origin    git@github.com:mojombo/grit.git (push)
 
 > We’ve mentioned and given some demonstrations of how the `git clone` command implicitly adds the `origin` remote for you. Here’s how to add a new remote explicitly. To add a new remote Git repository as a shortname you can reference easily, run `git remote add <shortname> <url>`:
 
+```shell
+git remote -v
+```
+
 ```
 $ git remote -v
 origin  https://github.com/sait-lab/git-demo-repo.git (fetch)
 origin  https://github.com/sait-lab/git-demo-repo.git (push)
+```
 
+```shell
+git remote add its git@github.com:sait-its/git-demo-repo.git
+git remote -v
+```
+
+```
 $ git remote add its git@github.com:sait-its/git-demo-repo.git
 $ git remote -v
 its     git@github.com:sait-its/git-demo-repo.git (fetch)
@@ -916,6 +948,10 @@ origin  https://github.com/sait-lab/git-demo-repo.git (push)
 ```
 
 Now you can use the string `its` on the command line instead of the whole URL. For example, if you want to fetch all the information that Paul has but that you don’t yet have in your repository, you can run `git fetch its`
+
+```shell
+git fetch its
+```
 
 ```
 $ git fetch its
@@ -958,6 +994,10 @@ $ git push origin main
 
 > If you want to see more information about a particular remote, you can use the `git remote show <remote>` command. If you run this command with a particular shortname, such as `origin`, you get something like this:
 
+```shell
+git remote show origin
+```
+
 ```
 $ git remote show origin
 * remote origin
@@ -978,6 +1018,11 @@ It lists the URL for the remote repository as well as the tracking branch inform
 
 You can run `git remote rename` to change a remote’s shortname. For instance, if you want to rename `its` to `sadt-its`, you can do so with `git remote rename`:
 
+```shell
+git remote rename its sadt-its
+git remote -v
+```
+
 ```
 $ git remote rename its sadt-its
 Renaming remote references: 100% (2/2), done.
@@ -992,6 +1037,11 @@ sadt-its        git@github.com:sait-its/git-demo-repo.git (push)
 It’s worth mentioning that this changes all your remote-tracking branch names, too. What used to be referenced at `its/main` is now at `sadt-its/main`.
 
 If you want to remove a remote for some reason — you’ve moved the server or are no longer using a particular mirror, or perhaps a contributor isn’t contributing anymore — you can either use `git remote remove` or `git remote rm`:
+
+```shell
+git remote remove sadt-its
+git remote
+```
 
 ```console
 $ git remote remove sadt-its
@@ -1023,8 +1073,12 @@ Git has the ability to tag specific points in a repository’s history as being 
 
 Creating an annotated tag in Git is simple. The easiest way is to specify `-a` when you run the `tag` command:
 
+```shell
+git tag -a v1.0 -m "my version 1.0"
+git tag
 ```
-$ git tag -a v1.0 -m "my version 1.0"
+
+```
 $ git tag
 v1.0
 ```
@@ -1033,22 +1087,45 @@ v1.0
 
 You can see the tag data along with the commit that was tagged by using the `git show` command:
 
+```shell
+git show v1.0
+git log --oneline --decorate --graph --all
+```
+
 ![git-show-tag](./git-basics.assets/git-show-tag.jpg) 
 
 That shows the tagger information, the date the commit was tagged, and the annotation message before showing the commit information.
+
+> [!NOTE]
+>
+> `git-show` is a command line utility that is used to view expanded details on Git objects such as blobs, trees, tags, and commits. `git-show` has specific behavior per object type.
+>
+> Tags show the tag message and other objects included in the tag. Trees show the names and content of objects in a tree. Blobs show the direct content of the blob. Commits show a commit log message and a diff output of the changes in the commit.
+>
+> Git objects are all accessed by references. By default, `git-show` acts against the HEAD reference. The HEAD reference always points to the last commit of the current branch. Therefore, you can use `git-show` to display the log message and diff output of the latest commit.
+>
+> https://www.atlassian.com/git/tutorials/git-show
 
 #### Lightweight Tags
 
 Another way to tag commits is with a lightweight tag. This is basically the commit checksum stored in a file — no other information is kept. To create a lightweight tag, don’t supply any of the `-a`, `-s`, or `-m` options, just provide a tag name:
 
+```shell
+git tag v1.0-lw
+git tag
+```
+
 ```console
-$ git tag v1.0-lw
 $ git tag
 v1.0
 v1.0-lw
 ```
 
 This time, if you run `git show` on the tag, you don’t see the extra tag information. The command just shows the commit (not Tagger, Date and Tagging message):
+
+```shell
+git show v1.0-lw
+```
 
 ```
 commit c88f81e4d0f3db6c869fea8c0a5f77e9e964fdfa (HEAD -> main, tag: v1.0-lw, tag: v1.0)
@@ -1070,6 +1147,10 @@ index 0000000..1c59427
 
 You can also tag commits after you’ve moved past them. Suppose your commit history looks like this:
 
+```shell
+git log --pretty=oneline
+```
+
 ```
 $ git log --pretty=oneline
 c88f81e4d0f3db6c869fea8c0a5f77e9e964fdfa (HEAD -> main, tag: v1.0-lw, tag: v1.0) docs: add second file
@@ -1086,8 +1167,13 @@ bee491d94feebaeb2bdb21b978aa6d03fa5e995a Initial commit
 
 Now, suppose you forgot to tag the project at v0.9, which was at the `05fa8735d...` commit. You can add it after the fact. To tag that commit, you specify the commit checksum (or part of it) at the end of the command:
 
+```shell
+git tag -a v0.9 05fa8735d -m "ver 0.9 before ga"
+git tag
+git show v0.9
 ```
-$ git tag -a v0.9 05fa8735d -m "ver 0.9 before ga"
+
+```
 $ git tag
 v0.9
 v1.0
@@ -1121,14 +1207,14 @@ index 1bca90c..769e57c 100644
 
 By default, the `git push` command doesn’t transfer tags to remote servers. You will have to explicitly push tags to a shared server after you have created them. This process is just like sharing remote branches — you can run `git push origin <tagname>`.
 
-```
-$ git push origin v1.0
+```shell
+git push origin v1.0
 ```
 
 If you have a lot of tags that you want to push up at once, you can also use the `--tags` option to the `git push` command. This will transfer all of your tags to the remote server that are not already there.
 
-```
-$ git push origin --tags
+```shell
+git push origin --tags
 ```
 
 > [!NOTE]
@@ -1141,6 +1227,11 @@ $ git push origin --tags
 
 To delete a tag on your local repository, you can use `git tag -d <tagname>`. For example, we could remove our lightweight tag above as follows:
 
+```shell
+git tag -d v1.0-lw
+git tag
+```
+
 ```console
 $ git tag -d v1.0-lw
 Deleted tag 'v1.0-lw' (was c88f81e)
@@ -1150,15 +1241,15 @@ v0.9
 v1.0
 ```
 
-Note that this does not remove the tag from any remote servers. You can delete a remote tag is with:
+Note that this does not remove the tag from any remote servers. You can delete a remote tag is with `git push origin --delete <tagname>`
 
-```
-$ git push origin --delete <tagname>
+```shell
+git push origin --delete v1.0-lw
 ```
 
 #### Checking out Tags
 
-If you want to view the versions of files a tag is pointing to, you can do a `git checkout` of that tag, although this puts your repository in "detached HEAD" state, which has some ill side effects:
+If you want to view the versions of files a tag is pointing to, you can do a `git checkout` of that tag, although this puts your repository in "**detached HEAD**" state, which has some ill side effects:
 
 ```console
 $ git checkout v1.1
@@ -1166,9 +1257,13 @@ $ git checkout v1.1
 
 In "detached HEAD" state, if you make changes and then create a commit, the tag will stay the same, but your new commit won’t belong to any branch and will be unreachable, except by the exact commit hash. Thus, if you need to make changes — say you’re fixing a bug on an older version, for instance — you will generally want to create a branch:
 
+```shell
+git checkout -b version0.9 v0.9
+```
+
 ```console
-$ git checkout -b version2 v2.0.0
-Switched to a new branch 'version2'
+$ git checkout -b version0.9 v0.9
+Switched to a new branch 'version0.9'
 ```
 
 If you do this and make a commit, your `version2` branch will be slightly different than your `v2.0.0` tag since it will move forward with your new changes, so do be careful.
