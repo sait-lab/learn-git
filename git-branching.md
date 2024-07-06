@@ -62,7 +62,13 @@ watch -n 1 tree .git
 
 ![empty-prj-folder](./git-branching.assets/empty-prj-folder.png) 
 
-Create a new file. Since it's untracked, no Git objects will be created.
+Create a new file.
+
+```shell
+echo 'the first file' > file1.txt
+```
+
+Since it's untracked, no Git objects will be created.
 
 ![obj-create-a-new-file](./git-branching.assets/obj-create-a-new-file.png) 
 
@@ -87,9 +93,24 @@ blob
 
 Create a subfolder and add two files under it. Use `git add` to track them.
 
+```shell
+mkdir -p subfolder
+echo 'the second file' > subfolder/file2.txt
+git add subfolder/file2.txt
+echo 'the third file' > subfolder/file3.txt
+git add subfolder/file3.txt
+tree .
+```
+
 ![obj-git-create-fs-tree](./git-branching.assets/obj-git-create-fs-tree.png) 
 
-Commit all three files. Note that there are six objects in total: one commit object, two tree objects, three blob object.
+Commit all three files.
+
+```shell
+git commit -m 'docs: add a subfolder and two files'
+```
+
+Note that there are six objects in total: one commit object, two tree objects, three blob object.
 
 ![obj-git-show](./git-branching.assets/obj-git-show.png)  
 
@@ -124,6 +145,10 @@ Git stores data as a series of **snapshots**.
 >
 > In Git, HEAD refers to the currently checked-out branch's latest commit. 
 
+```shell
+git log --oneline --decorate --graph --all
+```
+
 ![main-head-v1.0](./git-branching.assets/main-head-v1.0.png) 
 
 
@@ -141,8 +166,8 @@ Git stores data as a series of **snapshots**.
 
 What happens when you create a new branch? Well, doing so creates a new pointer for you to move around. Let's say you want to create a new branch called `testing`. You do this with the `git branch` command:
 
-```console
-$ git branch testing
+```shell
+git branch testing
 ```
 
 This creates a new pointer to the same commit you're currently on.
@@ -157,15 +182,24 @@ How does Git know what branch you're currently on? It keeps a special pointer ca
 
 You can easily see this by running a simple `git log` command that shows you where the branch pointers are pointing. This option is called `--decorate`.
 
+```shell
+git long --oneline --decorate
+```
+
 ![create-testing-branch](./git-branching.assets/create-testing-branch.png) 
 
 #### Switching Branches
 
 To switch to an existing branch, you run the `git checkout` command. Let's switch to the new `testing` branch:
 
-```console
-$ git checkout testing
+```shell
+git checkout testing
+git log --oneline --decorate --graph --all
 ```
+
+> [!NOTE]
+>
+> `git switch testing` can be used to switch to the `testing` branch as well.
 
 This moves `HEAD` to point to the `testing` branch.
 
@@ -175,10 +209,12 @@ This moves `HEAD` to point to the `testing` branch.
 
 What is the significance of that? Well, let's do another commit:
 
-```
-$ echo 'a new line from testing branch' >> file1.txt
-$ git add file1.txt
-$ git commit -m 'docs: add a line to file1'
+```shell
+cat file1.txt
+echo 'a new line from testing branch' >> file1.txt
+git add file1.txt
+git commit -m 'docs: add a line to file1'
+git log --oneline --decorate --graph --all
 ```
 
 ![advance-testing](./git-branching.assets/advance-testing.png) 
@@ -187,8 +223,9 @@ $ git commit -m 'docs: add a line to file1'
 
 This is interesting, because now your `testing` branch has moved forward, but your `main` branch still points to the commit you were on when you ran `git checkout` to switch branches. Let's switch back to the `main` branch:
 
-```console
-$ git checkout main
+```shell
+git checkout main
+git log --oneline --decorate
 ```
 
  ![checkout-master](./git-branching.assets/checkout-master.png) 
@@ -205,6 +242,14 @@ $ git checkout main
 >
 > To show commit history for the desired branch you have to explicitly specify it: `git log testing`. To show all of the branches, add `--all` to your `git log` command.
 
+```shell
+git checkout testing
+cat file1.txt
+git checkout main
+cat file1.txt
+git log --oneline --decorate --graph --all
+```
+
 ![checkout-main-from-testing](./git-branching.assets/checkout-main-from-testing.png) 
 
 > That command did two things. It moved the HEAD pointer back to point to the `main` branch, and it reverted the files in your working directory back to the snapshot that `main` points to. This also means the changes you make from this point forward will diverge from an older version of the project. It essentially rewinds the work you've done in your `testing` branch so you can go in a different direction.
@@ -217,10 +262,13 @@ $ git checkout main
 
 Let's make a few changes and commit again:
 
-```
-$ echo 'a new line from main branch' >> file1.txt
-$ git add file1.txt
-$ git commit -m 'docs: add a line to file1'
+```shell
+git checkout main
+cat file1.txt
+echo 'a new line from main branch' >> file1.txt
+git add file1.txt
+git commit -m 'docs: add a line to file1'
+git log --oneline --decorate --graph --all
 ```
 
 > Now your project history has diverged (see [Divergent history](https://git-scm.com/book/en/v2/ch00/divergent_history)). You created and switched to a branch, did some work on it, and then switched back to your main branch and did other work. Both of those changes are isolated in separate branches: you can switch back and forth between the branches and merge them together when you're ready. And you did all that with simple `branch`, `checkout`, and `commit` commands.
@@ -278,7 +326,7 @@ At this stage, you'll receive a call that another issue is critical and you need
 
 First, let's say you're working on your project and have a couple of commits already on the `main` branch.
 
-```
+```shell
 echo 'basic branching' > index.html
 git add index.html
 git commit -m 'C0: create index.html'
@@ -298,6 +346,10 @@ git commit -m 'C2: add branch definition to webpage'
 
 You've decided that you're going to work on issue #53 in whatever issue-tracking system your company uses. To create a new branch and switch to it at the same time, you can run the `git checkout -b iss53` or `git switch -c iss53`:
 
+```shell
+git switch -c iss53
+```
+
 ```
 $ git switch -c iss53
 Switched to a new branch 'iss53'
@@ -316,9 +368,9 @@ Switched to a new branch 'iss53'
 
 You work on your website and do some commits. Doing so moves the `iss53` branch forward, because you have it checked out (that is, your `HEAD` is pointing to it):
 
-```console
+```shell
 echo '-- branching in git --' >> index.html
-git commit -a -m 'Create new footer [issue 53]'
+git commit -a -m 'C3: Create new footer [issue 53]'
 ```
 
 ![add-footer-c3](./git-branching.assets/add-footer-c3.png) 
@@ -328,6 +380,10 @@ git commit -a -m 'Create new footer [issue 53]'
 Now you get the call that there is an issue with the website, and you need to fix it immediately. With Git, you don't have to deploy your fix along with the `iss53` changes you've made, and you don't have to put a lot of effort into reverting those changes before you can work on applying your fix to what is in production. All you have to do is switch back to your `main` branch.
 
 However, before you do that, note that if your working directory or staging area has uncommitted changes that conflict with the branch you're checking out, Git won't let you switch branches. It's best to have a clean working state when you switch branches. There are ways to get around this (namely, stashing and commit amending) that we'll cover later on, in [Stashing and Cleaning](https://git-scm.com/book/en/v2/ch00/_git_stashing). For now, let's assume you've committed all your changes, so you can switch back to your `main` branch:
+
+```shell
+git switch main
+```
 
 ```
 $ git switch main
@@ -342,10 +398,11 @@ At this point, your project working directory is exactly the way it was before y
 
 Next, you have a hotfix to make. Let's create a `hotfix` branch on which to work until it's completed:
 
-```
+```shell
 git switch -c hotfix
 echo 'contact john.doe@example.com' >> index.html
 git commit -a -m 'C4: Fix broken email address'
+git log --oneline --decorate --graph --all
 ```
 
 ![basic-branching-4](./git-branching.assets/basic-branching-4.png) 
@@ -354,10 +411,14 @@ git commit -a -m 'C4: Fix broken email address'
 
 You can run your tests, make sure the hotfix is what you want, and finally merge the `hotfix` branch back into your `main` branch to deploy to production. You do this with the `git merge` command:
 
+```shell
+git switch main
+git merge hotfix
+git log --oneline --decorate --graph --all
 ```
-$ git switch main
-$ git merge hotfix
 
+```
+$ git merge hotfix
 Updating 401e4c2..93b0def
 Fast-forward
  index.html | 1 +
@@ -374,6 +435,10 @@ Your change is now in the snapshot of the commit pointed to by the `main` branch
 
 After your super-important fix is deployed, you're ready to switch back to the work you were doing before you were interrupted. However, first you'll delete the `hotfix` branch, because you no longer need it — the `main` branch points at the same place. You can delete it with the `-d` option to `git branch`:
 
+```shell
+git branch -d hotfix
+```
+
 ```
 $ git branch -d hotfix
 Deleted branch hotfix (was 93b0def).
@@ -381,7 +446,7 @@ Deleted branch hotfix (was 93b0def).
 
 Now you can switch back to your work-in-progress branch on issue #53 and continue working on it.
 
-```
+```shell
 git switch iss53
 echo '-= new footer =-' >> index.html
 git commit -a -m 'C5: Finish the new footer [issue 53]'
@@ -427,8 +492,12 @@ $ git branch -d iss53
 
 Occasionally, this process doesn't go smoothly. If you changed the same part of the same file differently in the two branches you're merging, Git won't be able to merge them cleanly. If your fix for issue #53 modified the same part of a file as the `hotfix` branch, you'll get a merge conflict that looks something like this:
 
+```shell
+git switch main
+git merge iss53
 ```
-$ git switch main
+
+```
 $ git merge iss53
 Auto-merging index.html
 CONFLICT (content): Merge conflict in index.html
@@ -437,7 +506,11 @@ Automatic merge failed; fix conflicts and then commit the result.
 
 ![merge-conflict-view](./git-branching.assets/merge-conflict-view.png) 
 
-Git hasn't automatically created a new merge commit. It has paused the process while you resolve the conflict. If you want to see which files are unmerged at any point after a merge conflict, you can run `git status`:
+Git hasn't automatically created a new merge commit. It has paused the process while you resolve the conflict. If you want to see which files are unmerged at any point after a merge conflict, you can run
+
+```shell
+git status
+```
 
 ```
 $ git status
@@ -456,13 +529,13 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 Anything that has merge conflicts and hasn't been resolved is listed as unmerged. Git adds standard conflict-resolution markers to the files that have conflicts, so you can open them manually and resolve those conflicts. Your file contains a section that looks something like this:
 
+```shell
+cat index.html
+```
+
 ![conflict-markers](./git-branching.assets/conflict-markers.png) 
 
-This means the version in `HEAD` (your `main` branch, because that was what you had checked out when you ran your merge command) is the top part of that block (everything above the `=======`), while the version in your `iss53` branch looks like everything in the bottom part. In order to resolve the conflict, you have to either choose one side or the other or merge the contents yourself. For instance, you might resolve this conflict by replacing the entire block with this:
-
-```
--= merged footer =-
-```
+This means the version in `HEAD` (your `main` branch, because that was what you had checked out when you ran your merge command) is the top part of that block (everything above the `=======`), while the version in your `iss53` branch looks like everything in the bottom part. In order to resolve the conflict, you have to either choose one side or the other or merge the contents yourself. For instance, you might resolve this conflict by replacing the entire block with this: `-= merged footer =-`
 
 This resolution has a little of each section, and the `<<<<<<<`, `=======`, and `>>>>>>>` lines have been completely removed. After you've resolved each of these sections in each conflicted file, run `git add` on each file to mark it as resolved. Staging the file marks it as resolved in Git.
 
@@ -486,6 +559,10 @@ If you want to use a merge tool other than the default (Git chose `opendiff` in 
 
 After you exit the merge tool, Git asks you if the merge was successful. If you tell the script that it was, it stages the file to mark it as resolved for you. You can run `git status` again to verify that all conflicts have been resolved:
 
+```shell
+git status
+```
+
 ```
 $ git status
 On branch main
@@ -502,14 +579,18 @@ Changes to be committed:
 
 If you're happy with that, and you verify that everything that had conflicts has been staged, you can type `git commit` to finalize the merge commit. The commit message by default looks something like this:
 
-```
-$ # git commit will launch the default editor
-$ git commit
+```shell
+# git commit without extra arguments will launch the default editor
+git commit
 ```
 
 ![merge-commit-editor](./git-branching.assets/merge-commit-editor.png) 
 
 If you think it would be helpful to others looking at this merge in the future, you can modify this commit message with details about how you resolved the merge and explain why you did the changes you made if these are not obvious.
+
+```shell
+git log --oneline --decorate --graph --all
+```
 
 ![merge-commit-log-view](./git-branching.assets/merge-commit-log-view.png) 
 
@@ -531,6 +612,10 @@ Now that you've created, merged, and deleted some branches, let's look at some b
 
 The `git branch` command does more than just create and delete branches. If you run it with no arguments, you get a simple listing of your current branches:
 
+```shell
+git branch
+```
+
 ```console
 $ git branch
   iss53
@@ -540,6 +625,10 @@ $ git branch
 
 Notice the `*` character that prefixes the `main` branch: it indicates the branch that you currently have checked out (i.e., the branch that `HEAD` points to). This means that if you commit at this point, the `main` branch will be moved forward with your new work. To see the last commit on each branch, you can run `git branch -v`:
 
+```shell
+git branch -v
+```
+
 ```console
 $ git branch -v
   iss53   7bd33cb C5: Finish the new footer [issue 53]
@@ -548,6 +637,10 @@ $ git branch -v
 ```
 
 The useful `--merged` and `--no-merged` options can filter this list to branches that you have or have not yet merged into the branch you're currently on. To see which branches are already merged into the branch you're on, you can run `git branch --merged`:
+
+```shell
+git branch --merged
+```
 
 ```console
 $ git branch --merged
@@ -559,12 +652,20 @@ Because you already merged in `iss53` earlier, you see it in your list. Branches
 
 To see all the branches that contain work you haven't yet merged in, you can run `git branch --no-merged`:
 
+```shell
+git branch --no-merged
+```
+
 ```
 $ git branch --no-merged
  testing
 ```
 
 This shows your other branch. Because it contains work that isn't merged in yet, trying to delete it with `git branch -d` will fail:
+
+```shell
+git branch -d testing
+```
 
 ```console
 $ git branch -d testing
@@ -783,7 +884,11 @@ Create a fork of https://github.com/sait-lab/git-demo-repo and clone your fork t
 
 ```
 git clone git@github.com:YOUR_GITHUB_USERNAME/git-demo-repo ~/git-demo-remote
+```
+
+```shell
 cd ~/git-demo-remote
+git log --oneline --decorate --graph --all
 ```
 
 ![remote-branches-1-log](./git-branching.assets/remote-branches-1-log.png) 
@@ -791,6 +896,10 @@ cd ~/git-demo-remote
 ![remote-branches-1](./git-branching.assets/remote-branches-1.png) 
 
 If you do some work on your local `main` branch, and, in the meantime, someone else pushes to `github.com` and updates its `main` branch, then your histories move forward differently. Also, as long as you stay out of contact with your `origin` server, your `origin/main` pointer doesn't move.
+
+> [!NOTE]
+>
+> You can simulate someone else pushing code to remote `main` branch by modifying code on GitHub's web page.
 
  ![remote-and-local-commits](./git-branching.assets/remote-and-local-commits.png)  
 
@@ -807,6 +916,11 @@ To synchronize your work with a given remote, you run a `git fetch <remote>` com
 When you want to share a branch with the world, you need to push it up to a remote to which you have write access. Your local branches aren't automatically synchronized to the remotes you write to — you have to explicitly push the branches you want to share. That way, you can use private branches for work you don't want to share, and push up only the topic branches you want to collaborate on.
 
 If you have a branch named `serverfix` that you want to work on with others, you can push it up the same way you pushed your first branch. Run `git push <remote> <branch>`:
+
+```shell
+git switch -c serverfix
+git push origin serverfix
+```
 
 ```
 $ git switch -c serverfix
@@ -852,14 +966,11 @@ Let's simulate this situation by creating a new `clientfix` branch on GitHub's w
 
 ![create-clientfix-branch-on-gh](./git-branching.assets/create-clientfix-branch-on-gh.png) 
 
-```
-$ git fetch origin
-From github.com:hongyanca/git-demo-repo
- * [new branch]      clientfix  -> origin/clientfix
-
-$ git checkout -b clientfix origin/clientfix
-branch 'clientfix' set up to track 'origin/clientfix'.
-Switched to a new branch 'clientfix'
+```shell 
+git fetch origin
+git branch -v
+git checkout -b clientfix origin/clientfix
+git branch -v
 ```
 
 ![fetch-origin-new-local-branch](./git-branching.assets/fetch-origin-new-local-branch.png) 
@@ -880,10 +991,8 @@ $ git checkout clientfix
 
 To set up a local branch with a different name than the remote branch, you can easily use the first version with a different local branch name:
 
-```console
-$ git checkout -b sf origin/serverfix
-Branch sf set up to track remote branch serverfix from origin.
-Switched to a new branch 'sf'
+```shell
+git checkout -b sf origin/serverfix
 ```
 
 ![checkout-b-own-branch](./git-branching.assets/checkout-b-own-branch.png) 
@@ -892,15 +1001,19 @@ Now, your local branch `sf` will automatically pull from `origin/serverfix`.
 
 If you already have a local branch and want to set it to a remote branch you just pulled down, or want to change the upstream branch you're tracking, you can use the `-u` or `--set-upstream-to` option to `git branch` to explicitly set it at any time.
 
-```console
-$ git switch -c cf
-$ git branch -u origin/clientfix
-branch 'cf' set up to track 'origin/clientfix'.
+```shell
+git switch -c cf
+git branch -u origin/clientfix
+git log --oneline --decorate --graph --all
 ```
 
 ![set-upstream](./git-branching.assets/set-upstream.png) 
 
 If you want to see what tracking branches you have set up, you can use the `-vv` option to `git branch`. This will list out your local branches with more information including what each branch is tracking and if your local branch is ahead, behind or both.
+
+```shell
+git branch -vv
+```
 
 ```console
 $ git branch -vv
@@ -913,8 +1026,8 @@ $ git branch -vv
 
 It's important to note that these numbers are only since the last time you fetched from each server. This command does not reach out to the servers, it's telling you about what it has cached from these servers locally. If you want totally up to date ahead and behind numbers, you'll need to fetch from all your remotes right before running this. You could do that like this:
 
-```console
-$ git fetch --all; git branch -vv
+```shell
+git fetch --all; git branch -vv
 ```
 
 
@@ -930,6 +1043,10 @@ Generally it's better to simply use the `fetch` and `merge` commands explicitly 
 #### Deleting Remote Branches
 
 Suppose you're done with a remote branch — say you and your collaborators are finished with a feature and have merged it into your remote's `main` branch (or whatever branch your stable codeline is in). You can delete a remote branch using the `--delete` option to `git push`. If you want to delete your `serverfix` branch from the server, you run the following:
+
+```shell
+git push origin --delete serverfix
+```
 
 ```console
 $ git push origin --delete serverfix
