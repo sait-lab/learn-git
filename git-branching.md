@@ -36,6 +36,8 @@
 
 https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
 
+https://maryrosecook.com/blog/post/git-from-the-inside-out
+
 Git has 3 types of objects: blob, tree and commit.
 
 #### Blob Objects
