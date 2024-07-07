@@ -125,6 +125,10 @@ author AUTHOR_INFO 1719984322 -0600
 committer COMMITTER_INFO 1719984322 -0600
 ```
 
+![inside-git](./git-branching.assets/inside-git.webp) 
+
+Credit: https://jvns.ca/blog/2024/01/26/inside-git/
+
 
 
 ---
