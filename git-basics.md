@@ -113,6 +113,12 @@ The working tree or working directory, the staging area, and the Git directory.
 >
 > The Git directory is where Git stores the metadata and object database for your project. This is the most important part of Git, and it is what is copied when you *clone* a repository from another computer.
 
+> [!NOTE]
+>
+> The "working directory" and "working tree" are the same thing. It is a direc­to­ry (and its files and sub­di­rec­to­ries) on your file sys­tem that is asso­ci­at­ed with a repository. It has a `.git` sub­di­rec­to­ry.
+>
+> The "index", "staging area" and "--cached" are all the same thing (the `.git/index` file).
+
 #### Basic Git Workflow
 
 1. You modify files in your working tree.
@@ -555,7 +561,7 @@ index ecb469a..1bca90c 100644
 >     cmd = \"C:/Program Files/Meld/meld.exe\" $REMOTE $LOCAL
 > ```
 >
-> The screenshot below shows an example of using [Kaleidoscope](https://kaleidoscope.app/) as `git difftool` on macOS.![git-diff-ext-macos](./git-basics.assets/git-diff-ext-macos.png) 
+> The screenshot below shows an example of using [Kaleidoscope](https://kaleidoscope.app/) as `git difftool` on macOS.![git-diff-ext-macos](./git-basics.assets/git-diff-ext-macos.webp) 
 >
 > The screenshot below shows an example of using [Fork](https://git-fork.com/) as `git difftool` on macOS.
 > ![git-difftool-fork](./git-basics.assets/git-difftool-fork.jpg) 
