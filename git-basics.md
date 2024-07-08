@@ -556,17 +556,50 @@ index ecb469a..1bca90c 100644
 >
 > ```
 > [diff]
->     tool = meld
+>   tool = meld
 > [difftool "meld"]
->     cmd = \"C:/Program Files/Meld/meld.exe\" $REMOTE $LOCAL
+>   cmd = \"C:/Program Files/Meld/meld.exe\" $REMOTE $LOCAL
 > ```
 >
 > The screenshot below shows an example of using [Kaleidoscope](https://kaleidoscope.app/) as `git difftool` on macOS.![git-diff-ext-macos](./git-basics.assets/git-diff-ext-macos.webp) 
 >
-> The screenshot below shows an example of using [Fork](https://git-fork.com/) as `git difftool` on macOS.
-> ![git-difftool-fork](./git-basics.assets/git-difftool-fork.jpg) 
+> To configure Kaleidoscope as `git difftool` and `git mergetool` on macOS, open `~/.gitconfig` file and add the following lines:
 >
-> The screenshot below shows an example of using nvimdiff as `git difftool` on Linux terminal. ![git-diff-ext-nvimdiff](./git-basics.assets/git-diff-ext-nvimdiff.png) 
+> ``` 
+> [difftool "Kaleidoscope"]
+>   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+> [difftool]
+>   prompt = false
+>   trustExitCode = true
+> [merge]
+>   tool = Kaleidoscope
+>   conflictstyle = zdiff3
+> [mergetool "Kaleidoscope"]
+>   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+>   trustExitCode = true
+> [mergetool]
+>   prompt = false
+> ```
+>
+> The screenshot below shows an example of using `nvimdiff` as `git difftool` on Linux terminal. ![git-diff-ext-nvimdiff](./git-basics.assets/git-diff-ext-nvimdiff.png)
+>
+> To configure `nvimdiff` as `git difftool` and `nvim` as `git mergetool` on Linux, open `~/.gitconfig` file and add the following lines:
+>
+> ```
+> [difftool]
+>   prompt = false
+> [diff]
+>   tool = nvimdiff
+> [difftool "nvimdiff"]
+>   cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+> [merge]
+>   tool = nvim
+> [mergetool]
+>   prompt = false
+>   keepBackup = false
+> [mergetool "nvim"]
+>   cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+> ```
 
 #### Committing Your Changes
 
@@ -576,7 +609,7 @@ index ecb469a..1bca90c 100644
 git commit
 ```
 
-> Doing so launches your editor of choice.
+Doing so launches your editor of choice.
 
 > [!NOTE]  
 >
