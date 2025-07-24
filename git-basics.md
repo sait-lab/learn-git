@@ -248,7 +248,7 @@ git clone https://github.com/YOUR_GITHUB_USERNAME/git-demo-repo.git
 git clone git@github.com:YOUR_GITHUB_USERNAME/git-demo-repo.git
 ```
 
-That creates a directory named `git-basics`, initializes a `.git` directory inside it, pulls down all the data for that repository, and checks out a working copy of the latest version. If you go into the new `git-basics` directory that was just created, you’ll see the project files in there, ready to be worked on or used.
+That creates a directory named `git-demo-repo`, initializes a `.git` directory inside it, pulls down all the data for that repository, and checks out a working copy of the latest version. If you go into the new `git-demo-repo` directory that was just created, you’ll see the project files in there, ready to be worked on or used.
 
 If you want to clone the repository into a directory named something other than `git-demo-repo`, you can specify the new directory name as an additional argument:
 
