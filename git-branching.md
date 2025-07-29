@@ -189,7 +189,7 @@ How does Git know what branch you're currently on? It keeps a special pointer ca
 You can easily see this by running a simple `git log` command that shows you where the branch pointers are pointing. This option is called `--decorate`.
 
 ```shell
-git long --oneline --decorate
+git log --oneline --decorate
 ```
 
 ![create-testing-branch](./git-branching.assets/create-testing-branch.png) 
